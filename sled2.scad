@@ -30,6 +30,6 @@ module sled( w, d, h ){
      translate([0,c_depth,c_height/2])
 	  sphere(c_height/2);
      translate([c_width,c_depth/2,0])
-	  cylinder( h = c_height, d=c_depth, center=center_set);
+	  oval( w = c_height, l=c_depth/2, height = c_height, center=center_set);
      }
 }
