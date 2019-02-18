@@ -13,7 +13,7 @@ module sled( w, d, h ){
      c_height = h;
      c_parms = [ c_width, c_depth, c_height ];
 
-     hull(){//union(){
+     hull(){
      color("green")
 	  cube(c_parms, center=center_set);
      translate([0,0,c_height/2])
