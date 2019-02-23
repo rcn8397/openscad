@@ -1,4 +1,5 @@
 ///< Honeycomb Generator
+use <math.scad>;
 
 ///< Cell parameters mm
 cell_thickness = 1;
@@ -18,12 +19,11 @@ module cell( height, radius, thickness=1, open=true ){
 	}
 }
 
-module honeycomb( rows, cols ) {
+module honeycomb( rows, cols, adjacent=true ) {
        ///< Simple HCP latice
        ///< ( https://en.wikipedia.org/wiki/Close-packing_of_equal_spheres#Simple_hcp_lattice )
-       cellsize = cell_radius;// - cell_thickness;
-       //offset   = sqrt( ( ( 2 * cellsize) * ( 2 * cellsize ) ) - ( cellsize * cellsize ) );
-       offset = cell_radius*2;
+       cellsize = adjacent ? cell_radius - cell_thickness : cell_radius ;
+       offset = hyp_from_sides( (cellsize * 2), cellsize );
        for( i = [0:rows-1] ){
        	    for( j = [0:cols-1] ){
 	    	 translate( [ ( j * offset ) + ( i % 2 ) * (offset/2 ), i * ( cellsize * 1.5 ), 0 ] )
