@@ -2,11 +2,12 @@
 use <math.scad>;
 
 ///< Cell parameters mm
-
-cell_height    = 2;
+cell_thickness = 1;
+cell_height    = 1;
 cell_radius    = 5;
-cell_thickness = cell_radius * 0.20;
-pack           = true;
+
+///< Comb parameters mm
+
 
 ///< Modules
 module cell( height, radius, thickness=1, open=true ){
@@ -18,16 +19,17 @@ module cell( height, radius, thickness=1, open=true ){
 	}
 }
 
-module honeycomb( rows, cols, pack=true ) {
+module tile( rows=1, cols=1, obj_r = 1, pack=true ) {
        ///< Simple HCP latice
        ///< ( https://en.wikipedia.org/wiki/Close-packing_of_equal_spheres#Simple_hcp_lattice )
-       cellsize = pack ? cell_radius * 0.7 : cell_radius ;
+       cellsize = pack ? obj_r - obj_r * 0.1 : obj_r ;
+       
        offset = hyp_from_sides( (cellsize * 2), cellsize );
        for( i = [0:rows-1] ){
        	    for( j = [0:cols-1] ){
-	    	 translate( [ ( j * offset ) + ( i % 2 ) * (offset/2 ), i * ( cellsize * 2 ), 0 ] )
+	    	 translate( [ ( j * offset ) + ( i % 2 ) * (offset/2 ), i * ( cellsize * 1.5 ), 0 ] )
 		 rotate( [0, 0, 90 ] ) ///< Rotate the cells so they are aligned
-		 cell( cell_height, cell_radius, cell_thickness );
+		 children();
 		 }
 	}
 }
@@ -35,4 +37,5 @@ module honeycomb( rows, cols, pack=true ) {
 
 
 ///< Proto type
-honeycomb( 5, 5, pack );
+tile( 3, 2, cell_radius, true) cell( cell_height, cell_radius, cell_thickness );
+///< Tile
