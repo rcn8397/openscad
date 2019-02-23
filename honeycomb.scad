@@ -5,6 +5,7 @@ use <math.scad>;
 cell_thickness = 1;
 cell_height    = 5;
 cell_radius    = 4;
+adjacent_sides = true;
 
 ///< Comb parameters mm
 
@@ -36,4 +37,4 @@ module honeycomb( rows, cols, adjacent=true ) {
 
 
 ///< Proto type
-honeycomb( 3, 5 );
+honeycomb( 5, 5, adjacent_sides );
