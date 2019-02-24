@@ -21,21 +21,20 @@ module coaster( rad, height, open = true ){
      ///< Place the cylinder in the center of the grid
      xyz = mid_pt_2d( [xstep, ystep], [0,0] );
 
-
-//     difference(){
-//	  translate(xyz)rotate([180,0,0])
-//	       color("red")cylinder( r = rad, h = height );
-//	  translate( xyz - [0,0,2] )
-//         	  color("blue",0.5)cylinder(r = rad-1, h = height-1 );
-//     }
-     translate([0,0,-height])
-     difference(){
-	  translate( xyz )
-	       color("green")cylinder(r = rad, h = height);
-         tile( row, col, width, true, rot=30 ) cylinder( r = width/2, h = height, $fn=6);
+     union(){
+         difference(){
+    	  translate(xyz)rotate([180,0,0])
+    	       color("red")cylinder( r = rad, h = height );
+    	  translate( xyz - [0,0,height] )
+             	  color("blue",0.5)cylinder(r = rad-1, h = height-1 );
+         }
+         translate([0,0,-height])
+         difference(){
+    	  translate( xyz )
+    	       color("green")cylinder(r = rad, h = height);
+             tile( row, col, width, true, rot=30 ) cylinder( r = width/2, h = height, $fn=6);
+         }
      }
 }
 
-
-
-coaster(10, 4, true);
+coaster(10, 5, true);
