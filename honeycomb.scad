@@ -3,18 +3,18 @@ use <math.scad>;
 
 ///< Cell parameters mm
 
-cell_height    = 2;
-cell_radius    = 5;
+cell_height    = 5;
+cell_radius    = 2;
 cell_thickness = cell_radius * 0.20;
 pack           = true;
 
 ///< Modules
-module cell( height, radius, thickness=1, open=true ){
-       h_adjust = open ? 1 : 0;
-       r_adjust = ( radius == thickness ) ? ( radius - ( radius -1 ) ) : thickness;
+module cell( height, radius, thickness=1, open=false ){
+       z_adjust = open ? 0 : 1;
+       r_adjust  = ( radius == thickness ) ? ( radius - ( radius -1 ) ) : thickness;
        difference(){
 	cylinder( h=height, r=radius, $fn=6 );
-	color("blue",0.75)cylinder( h=height, r=radius-r_adjust, $fn=6 );
+	translate([0,0,z_adjust])color("blue",0.75)cylinder( h=height, r=radius-r_adjust, $fn=6 );
 	}
 }
 
