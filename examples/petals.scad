@@ -14,5 +14,10 @@ module petal(length=16, width=10, thickness=2){
 
 function hypo_to_side(h) = sqrt( pow( h, 2 ) / 2 );
 
-petal();
+
+for( i=[0:10] ){
+     clr=rands(0.0,1.0,4);
+     rotate([0,0,i*360/10])color(clr)
+	  petal();
+     }
 
