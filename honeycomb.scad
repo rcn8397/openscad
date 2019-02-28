@@ -4,7 +4,7 @@ use <math.scad>;
 ///< Cell parameters mm
 
 cell_height    = 5;
-cell_radius    = 2;
+cell_radius    = 5;
 cell_thickness = cell_radius * 0.20;
 pack           = true;
 

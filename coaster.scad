@@ -2,14 +2,16 @@
 use <tile2.scad>
 use <math.scad>
 
+$fn=360;
+
 ///< Cellular pattern params
 cell_rows   = 10;
-cell_cols   = 10;
+cell_cols   = 9;
 cell_radius = 5;
 
 ///< coaster parameters
-coaster_r   = 30;
-coaster_h   = 10;
+coaster_r   = 40;
+coaster_h   = 3;
 coaster_c   = [cell_radius, cell_rows, cell_cols];
 
 coaster(coaster_r, coaster_h, coaster_c);
