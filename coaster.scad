@@ -2,7 +2,7 @@
 use <tile2.scad>
 use <math.scad>
 
-$fn=360;
+$fn=60;
 
 ///< Cellular pattern params
 cell_rows   = 10;
@@ -11,13 +11,23 @@ cell_radius = 5;
 
 ///< coaster parameters
 coaster_r   = 40;
-coaster_h   = 3;
+coaster_h   = 4;
 coaster_c   = [cell_radius, cell_rows, cell_cols];
+coaster_l   = 2;
 
-coaster(coaster_r, coaster_h, coaster_c);
+coaster(coaster_r, coaster_h, coaster_c, coaster_l);
+
+//ring( coaster_r, coaster_h );
+
+module lip_ring( rad, height ){
+    difference(){
+    cylinder( r = rad, h = height );
+    translate([0,0,-0.0009])color([1,0,0])cylinder( r = rad-1, h = height+1 );
+    }
+}
 
 ///< Module
-module coaster( rad, height, cellular = [5,10,10] ){
+module coaster( rad, height, cellular = [5,10,10], lip_height=2 ){
           
      cell_r = cellular[0];
      row    = cellular[1];
@@ -30,6 +40,9 @@ module coaster( rad, height, cellular = [5,10,10] ){
      xyz = mid_pt_2d( [xstep, ystep], [0,0] );
 
      union(){
+         translate(xyz - [0,0,+height])rotate([180,0,0])
+            lip_ring( rad, lip_height );
+         
          difference(){
     	  translate(xyz)rotate([180,0,0])
     	       color("red")cylinder( r = rad, h = height );
