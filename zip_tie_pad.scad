@@ -1,6 +1,6 @@
 ///< Zip tie pad
 
-pad_w = 30;
+pad_w = 20;
 pad_d = pad_w;
 top_pad_h = 1;
 pad_h = 1;
@@ -26,13 +26,9 @@ module zip_anchor(w,h,c,th){
      color( rand_clr() )
 	  union(){
 	  scale([1,1,0.5])
-	       translate([w/2,w,w/4+h*2+th*2])
+	       translate([w/2,w/2,w/2])
 	       rotate([90,0,0])
-	       color( rand_clr() ) cylinder( r = w/4, h = w, $fn=60 );
-	  scale([1,1,0.5])
-	       translate([0,w/2,w/4+h*2+th*2])
-	       rotate([0,90,0])
-	       color( rand_clr() ) cylinder( r = w/4, h = w, $fn=60 );		
+	       color( rand_clr() ) sphere( r = w/2, $fn=60 );	
 	  translate([c,c,h+h*0.1])color( rand_clr() )cube( [w/4, w/4, th] );
 	  translate([0,c,h])cube([w, w/4, th/2]);
 	  translate([c,0,h])cube([w/4, w, th/2]);
