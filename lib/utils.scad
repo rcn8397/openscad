@@ -1,6 +1,13 @@
+///< Utilities
+
+function rand_clr() = rands( 0,1,3 );
+
+///< Length conversions
+function in2mm( i ) = ( i * 25.4 ); 
+function mm2in( m ) = ( m / 25.4 );
+
 /// This is pulled from stackoverflow
 /// https://stackoverflow.com/questions/45826208/openscad-rotating-around-a-particular-point
-
 
 // rotate as per a, v, but around point pt
 module rotate_about_pt(a, v, pt) {
@@ -9,6 +16,3 @@ module rotate_about_pt(a, v, pt) {
             translate(-pt)
                 children();   
 }
-
-color("Red")cube([10,10,1]);
-rotate_about_pt(45,0,[5,5,0]) cube([10,10,1]);

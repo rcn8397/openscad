@@ -1,6 +1,6 @@
 ///< Coster.scad
-use <tile2.scad>
-use <math.scad>
+use <../lib/tile2.scad>
+use <../lib/math.scad>
 
 $fn=60;
 

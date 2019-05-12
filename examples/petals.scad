@@ -1,5 +1,6 @@
 ///< Petals tutorial from all3dp
 ///< https://all3dp.com/2/openscad-tutorial-for-advanced-users-modules-functions/
+use <../lib/utils.scad>
 
 module petal(length=16, width=10, thickness=2){
      hull(){
