@@ -1,6 +1,6 @@
 ///< Object definition
-use <math.scad>;
-use <utils.scad>;
+use <lib/math.scad>;
+use <lib/utils.scad>;
 
 ///< Parameters
 x = 1;
