@@ -1,4 +1,12 @@
-//< Tile again
+//< Tile again, the interface is improved for more options
+//< row: number of rows
+//< col: number of columns
+//< cw : cubed width, space between child objects tiled
+//< pack: use offset packing
+//< rot : angle of rotation for child objects
+//< xpad: x axis padding
+//< ypad: y axis padding
+
 use <math.scad>
 
 module tile( row, col, cw, pack=false, rot=0, xpad=0, ypad=0 ){
@@ -14,10 +22,10 @@ module tile( row, col, cw, pack=false, rot=0, xpad=0, ypad=0 ){
      }
 }
 
-width = 1;
+width = 2;
 tile(2,2,width+0.5) {
      difference() {
-	  cylinder(width);
-	  cube(width,true);
+	     cube(width,true);
+	 cylinder(h=width, d = width, $fn = 60);
      }
 }

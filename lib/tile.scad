@@ -20,4 +20,4 @@ module tile( rows, cols, d, pack=1, angle=90 ) {
 ///< Proto type
 tile( 2, 2, width, pack=1) cell( 1, radius, radius * 0.2 );
 //tile( 2, 2, radius*2) circle(radius, true );
-///tile( 2, 2, width+1 )cube( width, true );
+//tile( 2, 2, width+1 )cube( width, true );

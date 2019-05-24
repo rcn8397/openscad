@@ -1,6 +1,6 @@
 ///< Object definition
-use <lib/math.scad>;
-use <lib/utils.scad>;
+use <../lib/math.scad>;
+use <../lib/utils.scad>;
 
 ///< Parameters
 x = 1;
@@ -13,8 +13,9 @@ d = 1;
 
 ///< Modules
 module object( height, width, depth ){
-     translate( [ x, y, z ] ) cube( height, width, depth );
+     translate( [ x, y, z ] ) cube( [width, depth, height] );
 }
 
 ///< Build object
-object( h, w, d );
+object( w, d, h );
+
