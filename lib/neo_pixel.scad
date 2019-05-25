@@ -3,6 +3,8 @@ use <../lib/math.scad>;
 use <../lib/utils.scad>;
 
 ///< Parameters - Begin
+led_assembly_h = 2.8;
+led_assembly_d = 9.5;
 
 ///< Diameter of the PCB 
 pcb_d = 9.5;
@@ -11,7 +13,7 @@ pcb_h = 1.2;
 ///< Demensions of the LED IC
 led_w = 5;
 led_d = led_w;
-led_h = 2.8 - pcb_h;
+led_h = led_assembly_h - pcb_h;
 
 
 ///< Modules
@@ -32,11 +34,14 @@ module led(){
 
 module neo_pixel(){
      ///< Assembly of the led and pcb_pad
-     translate([-led_w/2,-led_d/2,pcb_h])led();
-     pcb();
+     union(){
+          translate([-led_w/2,-led_d/2,pcb_h-0.01])led();
+          pcb();
+          }
 
 }
 
 ///< Build object
-neo_pixel();
+///< Remove this when including
+//neo_pixel();
 
