@@ -4,11 +4,12 @@ use <../lib/utils.scad>;
 include <../lib/neo_pixel.scad>
 
 ///< Parameters
-frame_w = 150;
-frame_d = led_assembly_h-led_assembly_h*0.2;
-frame_h = led_assembly_d+1;
+frame_w = 50;//150;
+frame_d = led_assembly_h-led_assembly_h*0.15;
+pcb_socket_d = led_assembly_d + 1;
+frame_h = pcb_socket_d+1.5;
 
-num_leds = 10;
+num_leds = 2;//0;
 
 ///< Modules
 module led_frame( width, depth, height ){
@@ -16,6 +17,7 @@ module led_frame( width, depth, height ){
           cube( [width, depth, height] );
           led_spacing_w = width/( num_leds );
 
+          ///< Make x number of slots
           for (i = [0:num_leds]){
                offset_spacing = (( i * led_spacing_w ) + ( led_spacing_w ));
                remaining = width - offset_spacing;
@@ -23,7 +25,8 @@ module led_frame( width, depth, height ){
                     translate( [ offset_spacing, -0.1, height/2 ] )
                          rotate( [ -90, 0, 0 ])
                          color( rand_clr() )
-                         neo_pixel();
+
+                         neo_pixel(h=pcb_h+0.1, d=pcb_socket_d);
                }
           }
      }
