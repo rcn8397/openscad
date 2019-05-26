@@ -8,7 +8,7 @@ module Frame( show_nameplate = false ){
 
      ///< Frame demensions
      frame_clearance = 0.01;
-     frame_p = 5 + frame_clearance;
+     frame_p = 5 + frame_clearance; //< Padding
      frame_w = nameplate_w + frame_p;
      frame_d = nameplate_d + frame_p;
      frame_h = nameplate_h + frame_p;
