@@ -1,6 +1,7 @@
 ///< Triangle module
-use <math.scad>
-use <utils.scad>
+use <math.scad>;
+use <utils.scad>;
+use <hull.scad>;
 
 module tri(pt1, pt2, pt3, h=1) {
      color( rands( 0,1,3 ) ) linear_extrude( height=h )
@@ -49,3 +50,25 @@ module line(start, end, thickness = 1, fn = 30) {
     }
 }
 
+
+/*
+Hulled box:
+
+Parameterized box with rounded corners. This uses the hull.scad
+to hull four cylinders around four point in space. This variation
+offsets the box to zero/zero and takes in w,d,h to mesh better
+with tuples.
+*/
+module hulled_cube( w, d, h, r = 1 ){
+    points = [
+        [ 0, 0, 0 ],
+        [ w, 0, 0 ],
+        [ 0, w, 0 ],
+        [ w, w, 0 ],
+        ];
+    resize( [w,d,h]){
+        translate( [r, r,0] ){
+            rounded_box( points, radius = r, height=h );
+        }
+    }
+}
