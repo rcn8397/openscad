@@ -42,11 +42,11 @@ module bar(length, width, thickness, hole_diameter){
 	plate([[0,0,0], [length,0,0]], width, thickness, hole_diameter);
 }
 
-module rounded_box(points, radius, height){
+module rounded_box(points, radius, height, facets=30){
 	hull(){
 		for (p = points){
 			translate(p)
-				cylinder(r=radius, h=height);
+				cylinder(r=radius, h=height, $fn=facets);
 		}
 	}
 }

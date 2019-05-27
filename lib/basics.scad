@@ -1,5 +1,6 @@
 ///< Triangle module
 use <math.scad>
+use <utils.scad>
 
 module tri(pt1, pt2, pt3, h=1) {
      color( rands( 0,1,3 ) ) linear_extrude( height=h )
@@ -47,5 +48,4 @@ module line(start, end, thickness = 1, fn = 30) {
         translate(end) sphere(thickness, $fn = fn);
     }
 }
-
 
