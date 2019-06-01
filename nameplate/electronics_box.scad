@@ -4,7 +4,7 @@ use <../lib/utils.scad>;
 include<nameplate.scad>;
 use <../lib/containers.scad>;
 
-box_depth = 50;
+box_depth = 25;
 box_thickness = 5;
 lid_thickness = 5;
 
