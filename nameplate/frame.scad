@@ -1,6 +1,7 @@
 ///< Object definition
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
+use <led_frame.scad>;
 include <nameplate.scad>
 
 ///< Parameters
@@ -42,8 +43,10 @@ module frame( w, d, h, pad = 5, show_nameplate = false ){
 	       translate( frame_view )
 	       cube( view_cut );
      }
+     translate( [ pad/2, ( d + pad ), pad/2 ] )
+	  led_frame( w, d, h );
 }
 
 ///< Build object
-//echo( nameplate_w, nameplate_d, nameplate_h  );
-//frame( nameplate_w, nameplate_d, nameplate_h  );
+echo( nameplate_w, nameplate_d, nameplate_h  );
+frame( nameplate_w, nameplate_d, nameplate_h  );
