@@ -43,8 +43,9 @@ module frame( w, d, h, pad = 5, show_nameplate = false ){
 	       translate( frame_view )
 	       cube( view_cut );
      }
-     translate( [ pad/2, ( d + pad ), pad/2 ] )
-	  led_frame( w, d, h );
+     translate( [ pad/2, ( d + pad - 0.1 ), pad/2 ] )
+	  mirror( [ 0, 1, 0 ] )
+	  led_frame( w, d + pad, h );
 }
 
 ///< Build object
