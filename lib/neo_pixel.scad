@@ -37,7 +37,7 @@ module led(){
 module neo_pixel(h=pcb_h, d=pcb_d){
      ///< Assembly of the led and pcb_pad
      union(){
-          translate([-led_w/2,-led_d/2,pcb_h-0.01])led();
+          translate([-led_w/2,-led_d/2,h-0.01])led();
           pcb(h=h, d=d);
           }
 
