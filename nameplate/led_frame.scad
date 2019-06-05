@@ -4,12 +4,13 @@ use <../lib/utils.scad>;
 include <../lib/neo_pixel.scad>
 
 ///< Parameters
-frame_w      = 150;
 pcb_socket_d = led_assembly_d + 1;
 pcb_socket_h = 1.0;
-frame_d      = led_assembly_h+pcb_socket_h;//-led_assembly_h*0.04;
-frame_h      = pcb_socket_d+1.5;
 num_leds     = 10;
+
+led_frame_w  = 150;
+led_frame_d  = led_assembly_h+pcb_socket_h;
+led_frame_h  = pcb_socket_d+1.5;
 
 ///< Modules
 module led_frame( width, depth, height ){
@@ -31,12 +32,16 @@ module led_frame( width, depth, height ){
                         rotate( [ -90, 0, 0 ])
                         color( rand_clr() )
                         cylinder( h=pcb_h+pcb_socket_h, d = pcb_socket_d );
-
                }
           }
      }
 }
 
 ///< Build object
-echo( "Frame height:", frame_h, "depth:", frame_d, "width:", frame_w );
-led_frame( frame_w, frame_d, frame_h );
+//echo( "Led_Frame height:",
+//      led_frame_h,
+//      "depth:",
+//      led_frame_d,
+//      "width:",
+//      led_frame_w );
+//led_frame( led_frame_w, led_frame_d, led_frame_h );

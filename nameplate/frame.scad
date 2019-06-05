@@ -4,26 +4,26 @@ use <../lib/utils.scad>;
 include <nameplate.scad>
 
 ///< Parameters
-module Frame( show_nameplate = false ){
+module frame( w, d, h, pad = 5, show_nameplate = false ){
 
      ///< Frame demensions
      frame_clearance = 0.01;
-     frame_p = 5 + frame_clearance; //< Padding
-     frame_w = nameplate_w + frame_p;
-     frame_d = nameplate_d + frame_p;
-     frame_h = nameplate_h + frame_p;
+     frame_p = pad + frame_clearance; //< Padding
+     frame_w = w + frame_p;
+     frame_d = d + frame_p;
+     frame_h = h + frame_p;
 
      frame = [ frame_w, frame_d, frame_h ];
      frame_inset = [0, frame_p/2, frame_p/2 ];
      frame_view  = [0, 0,         frame_p ];
 
      nameplate_cut = [ ( frame_w + ( frame_p * 2.0 ) ) * 1.01,
-		     nameplate_d * 1.01,
-		     nameplate_h * 1.01 ];
+		     d * 1.01,
+		     h * 1.01 ];
 
      view_w = frame_w;
-     view_d = nameplate_d;
-     view_h = nameplate_h - ( frame_p);
+     view_d = d;
+     view_h = h - ( frame_p);
      view_cut = [ view_w, view_d, view_h ];
 
      if( show_nameplate ){
@@ -44,9 +44,6 @@ module Frame( show_nameplate = false ){
      }
 }
 
-
 ///< Build object
-//difference(){
-     Frame( );
-//     translate( [ 190, 0, 0 ] )cube( [30,50,80] );
-//}
+//echo( nameplate_w, nameplate_d, nameplate_h  );
+//frame( nameplate_w, nameplate_d, nameplate_h  );
