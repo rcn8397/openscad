@@ -1,7 +1,7 @@
 ///< Object definition
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
-use <led_frame.scad>;
+use <led_array.scad>;
 include <nameplate.scad>
 
 ///< Parameters
@@ -19,8 +19,8 @@ module frame( w, d, h, pad = 5, show_nameplate = false ){
      frame_view  = [0, 0,         frame_p ];
 
      nameplate_cut = [ ( frame_w + ( frame_p * 2.0 ) ) * 1.01,
-		     d * 1.01,
-		     h * 1.01 ];
+                       d * 1.01,
+                       h * 1.01 ];
 
      view_w = frame_w;
      view_d = d;
@@ -28,24 +28,24 @@ module frame( w, d, h, pad = 5, show_nameplate = false ){
      view_cut = [ view_w, view_d, view_h ];
 
      if( show_nameplate ){
-	  echo( nameplate );
-	  color( rand_clr() )
-	       translate( frame_inset ){ Nameplate( nameplate ); }
+          echo( nameplate );
+          color( rand_clr() )
+              translate( frame_inset ){
+              Nameplate( nameplate ); }
      }
 
      ///< Holder
      difference(){
-	  color( rand_clr() )cube( frame );
-	  color( rand_clr() )
-	       translate( frame_inset )
-	       Nameplate( nameplate_cut );
-	  color( rand_clr() )
-	       translate( frame_view )
-	       cube( view_cut );
+          color( rand_clr() )cube( frame );
+          color( rand_clr() )
+               translate( frame_inset )
+               Nameplate( nameplate_cut );
+          color( rand_clr() )
+               translate( frame_view )
+               cube( view_cut );
+          translate( [ pad/2, ( pad  ), pad/2 ] )
+          led_array( w, d, h );
      }
-     translate( [ pad/2, ( d + pad - 0.1 ), pad/2 ] )
-	  mirror( [ 0, 1, 0 ] )
-	  led_frame( w, d + pad, h );
 }
 
 ///< Build object
