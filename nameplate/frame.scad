@@ -5,6 +5,8 @@ use <led_array.scad>;
 include <nameplate.scad>
 
 ///< Parameters
+esp8266_h = 10;
+
 module frame( w, d, h, pad = 5, show_nameplate = false ){
 
      ///< Frame demensions
@@ -35,38 +37,38 @@ module frame( w, d, h, pad = 5, show_nameplate = false ){
      }
 
      ///< Holder
-//     difference(){
-//          color( rand_clr() )cube( frame );
-//          color( rand_clr() )
-//               translate( frame_inset )
-//               Nameplate( nameplate_cut );
-//          color( rand_clr() )
-//               translate( frame_view )
-//               cube( view_cut );
-//          translate( [ pad/2, ( pad  ), pad/2 ] )
-//          led_array( w, d, h );
-//     }
+     difference(){
+          color( rand_clr() )cube( frame );
+          color( rand_clr() )
+               translate( frame_inset )
+               Nameplate( nameplate_cut );
+          color( rand_clr() )
+               translate( frame_view )
+               cube( view_cut );
+          translate( [ pad/2, ( pad  ), pad/2 ] )
+          led_array( w, d, h );
+     }
 
-     esp8266_h = 10;
-     translate( [ 0, frame_d, 0 ] ){
-	  cube( [ frame_p, esp8266_h, frame_h ] );
-	  translate( [ frame_w-frame_p, 0, 0 ] )
-	       cube( [ frame_p, esp8266_h, frame_h ] );
-	  translate( [ 0, esp8266_h, 0 ] )
-	       cube( [ frame_w, frame_p, frame_h ] );
-	  
-	  cube( [ frame_w, esp8266_h, frame_p ] );
-	       };
      
 }
 
-module shell( h ){
+module shell( w, d, h, pad = 5 ){
+     shell_w = w + pad;
+     shell_d = d + pad;
+     shell_h = h + pad;
 
-     
-
+     cube( [ pad, d, shell_h ] );
+     translate( [ shell_w-pad, 0, 0 ] )
+	  cube( [ pad, d, shell_h ] );
+     translate( [ 0, d, 0 ] )
+	  cube( [ shell_w, pad, shell_h ] );
+     cube( [ shell_w, d, pad ] );
 }
 
 ///< Build object
 
 echo( nameplate_w, nameplate_d, nameplate_h  );
 frame( nameplate_w, nameplate_d, nameplate_h  );
+translate( [ 0, nameplate_d+5, 0 ] ){
+     shell( nameplate_w, esp8266_h, nameplate_h  );
+}
