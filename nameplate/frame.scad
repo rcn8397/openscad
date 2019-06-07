@@ -35,19 +35,38 @@ module frame( w, d, h, pad = 5, show_nameplate = false ){
      }
 
      ///< Holder
-     difference(){
-          color( rand_clr() )cube( frame );
-          color( rand_clr() )
-               translate( frame_inset )
-               Nameplate( nameplate_cut );
-          color( rand_clr() )
-               translate( frame_view )
-               cube( view_cut );
-          translate( [ pad/2, ( pad  ), pad/2 ] )
-          led_array( w, d, h );
-     }
+//     difference(){
+//          color( rand_clr() )cube( frame );
+//          color( rand_clr() )
+//               translate( frame_inset )
+//               Nameplate( nameplate_cut );
+//          color( rand_clr() )
+//               translate( frame_view )
+//               cube( view_cut );
+//          translate( [ pad/2, ( pad  ), pad/2 ] )
+//          led_array( w, d, h );
+//     }
+
+     esp8266_h = 10;
+     translate( [ 0, frame_d, 0 ] ){
+	  cube( [ frame_p, esp8266_h, frame_h ] );
+	  translate( [ frame_w-frame_p, 0, 0 ] )
+	       cube( [ frame_p, esp8266_h, frame_h ] );
+	  translate( [ 0, esp8266_h, 0 ] )
+	       cube( [ frame_w, frame_p, frame_h ] );
+	  
+	  cube( [ frame_w, esp8266_h, frame_p ] );
+	       };
+     
+}
+
+module shell( h ){
+
+     
+
 }
 
 ///< Build object
+
 echo( nameplate_w, nameplate_d, nameplate_h  );
 frame( nameplate_w, nameplate_d, nameplate_h  );
