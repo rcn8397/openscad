@@ -7,7 +7,7 @@ include <nameplate.scad>
 ///< Parameters
 esp8266_h = 10;
 
-module frame( w, d, h, pad = 5, show_nameplate = false ){
+module frame( w, d, h, pad = 6.5, show_nameplate = false ){
 
      ///< Frame demensions
      frame_clearance = 0.01;
@@ -18,35 +18,24 @@ module frame( w, d, h, pad = 5, show_nameplate = false ){
 
      frame = [ frame_w, frame_d, frame_h ];
      frame_inset = [0, frame_p/2, frame_p/2 ];
-     frame_view  = [0, 0,         frame_p ];
-
      nameplate_cut = [ ( frame_w + ( frame_p * 2.0 ) ) * 1.01,
                        d * 1.01,
                        h * 1.01 ];
 
      view_w = frame_w;
-     view_d = d;
+     view_d = d + pad;
      view_h = h - ( frame_p);
      view_cut = [ view_w, view_d, view_h ];
 
-     if( show_nameplate ){
-          echo( nameplate );
-          color( rand_clr() )
-              translate( frame_inset ){
-              Nameplate( nameplate ); }
-     }
-
-     ///< Holder
+     ///< c-clamp
      difference(){
-          color( rand_clr() )cube( frame );
-          color( rand_clr() )
-               translate( frame_inset )
-               Nameplate( nameplate_cut );
-          color( rand_clr() )
-               translate( frame_view )
-               cube( view_cut );
-          translate( [ pad/2, ( pad  ), pad/2 ] )
-          led_array( w, d, h );
+         color( rand_clr() )cube( frame );
+         color( "orange" )translate( frame_inset )Nameplate( nameplate_cut );
+         color( "red" )
+             translate( [ 0, frame_d/2, frame_p ] )
+             mirror( [ 0, 1, 0 ] )cube( view_cut );
+         translate( [ pad/2, ( pad ), pad/2 ] )
+             led_array( w, d, h );
      }
 
      
@@ -69,6 +58,5 @@ module shell( w, d, h, pad = 5 ){
 
 echo( nameplate_w, nameplate_d, nameplate_h  );
 frame( nameplate_w, nameplate_d, nameplate_h  );
-translate( [ 0, nameplate_d+5, 0 ] ){
-     shell( nameplate_w, esp8266_h, nameplate_h  );
-}
+//translate( [ 0, nameplate_d+5, 0 ] ){
+//     shell( nameplate_w, esp8266_h, nameplate_h  );}
