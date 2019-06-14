@@ -1,14 +1,24 @@
-///< Triangle module
+///< Basics module
 use <math.scad>;
 use <utils.scad>;
 use <hull.scad>;
 
-module tri(pt1, pt2, pt3, h=1) {
+module triangle( w, d, h ){
+     difference(){
+	  hyp = hyp_from_sides( d, h );
+	  color( "red" )cube( [w, d, h] );
+	  rotate( [ 45, 0, 0 ] )
+	       translate( [ -0.01, 0, 0 ] )
+	       color( "green" )cube( [w+0.2, hyp, h] );
+     }
+}
+
+module tri_xy(pt1, pt2, pt3, h=1) {
      color( rands( 0,1,3 ) ) linear_extrude( height=h )
 	  polygon( points=[ pt1, pt2, pt3 ] );
 }
 
-module triangle( pts, h=1) {
+module triangle_xy( pts, h=1) {
      color( rands( 0,1,3 ) ) linear_extrude( height=h )
 	  polygon( points = pts );
 }
@@ -45,8 +55,8 @@ module rounded_pipe( r, h, fn = 60 ){
 /// https://stackoverflow.com/questions/49533350/is-that-possible-to-draw-a-line-using-openscad-by-joining-different-points
 module line(start, end, thickness = 1, fn = 30) {
     hull() {
-        translate(start) sphere(thickness, $fn = fn);
-        translate(end) sphere(thickness, $fn = fn);
+	translate(start) sphere(thickness, $fn = fn);
+	translate(end) sphere(thickness, $fn = fn);
     }
 }
 
@@ -61,14 +71,14 @@ with tuples.
 */
 module hulled_cube( w, d, h, r = 1 ){
     points = [
-        [ 0, 0, 0 ],
-        [ w, 0, 0 ],
-        [ 0, w, 0 ],
-        [ w, w, 0 ],
-        ];
+	[ 0, 0, 0 ],
+	[ w, 0, 0 ],
+	[ 0, w, 0 ],
+	[ w, w, 0 ],
+	];
     resize( [w,d,h]){
-        translate( [r, r,0] ){
-            rounded_box( points, radius = r, height=h );
-        }
+	translate( [r, r,0] ){
+	    rounded_box( points, radius = r, height=h );
+	}
     }
 }
