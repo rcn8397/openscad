@@ -4,7 +4,7 @@ use <../lib/math.scad>;
 use <../lib/utils.scad>;
 
 ///< Parameters
-teeth  = 43;
+teeth  = 42;
 hole_d = 4.5;
 height = 3.25;
 
@@ -16,7 +16,7 @@ pi     = 3.14159;
 circ_mm = width * pi; ///< in mm
 circ_in = mm2in( circ_mm );
 echo( circ_in, circ_mm );
-pitch_diameter   = 22;
+pitch_diameter   = 22.5;
 diametral_pitch  = teeth/pitch_diameter;
 echo( diametral_pitch );
 cylinder_z_trans = 2;
