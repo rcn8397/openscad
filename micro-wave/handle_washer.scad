@@ -3,7 +3,7 @@ use <../lib/math.scad>;
 use <../lib/utils.scad>;
 
 ///< Parameters
-height = 5;
+height = 2.5;
 outer = 8.2;
 inner = 4;
 
