@@ -16,7 +16,7 @@ pi     = 3.14159;
 circ_mm = width * pi; ///< in mm
 circ_in = mm2in( circ_mm );
 echo( circ_in, circ_mm );
-pitch_diameter   = 22.5;
+pitch_diameter   = 22;
 diametral_pitch  = teeth/pitch_diameter;
 echo( diametral_pitch );
 cylinder_z_trans = 2;
