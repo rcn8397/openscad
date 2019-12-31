@@ -30,7 +30,7 @@ module slide_lid(){
 
      ///< Backing
      color( rand_clr() ) translate( [ 0, comp_d+thickness+1.10, 0  ] )
-	  cube( [ comp_w, thickness*0.20, comp_h ] );
+	  cube( [ comp_w, thickness*0.30, comp_h ] );
      color( rand_clr() ) translate( [ 0, comp_d+thickness-2, thickness * 1.25 ] )
 	  cube( [ comp_w*0.95, thickness*0.50, comp_h*0.75 ] );
      ///< Slide
