@@ -118,6 +118,7 @@ module mirrored_channel_pairs( width,
 			       length = 1,
 			       rake = 0,
 			       clearance = 1,
+			       separation = 0,
 			       Q = 1,
 			       R = 1,
 			       S = 1,
@@ -140,7 +141,7 @@ module mirrored_channel_pairs( width,
 		      hide_key     = hide_key
 		      ); }
 
- translate( [width*2+rake*2,0,0 ]){
+ translate( [width*2+rake*2+separation,0,0 ]){
    channel_key_pair( width  = width,
 		     height = height,
 		     length = length,
@@ -170,7 +171,8 @@ if( true ){
 mirrored_channel_pairs( width  = 20,
 			height = 20,
 			length = 20,
-			rake   = 10,
+			rake   = 0,
+			separation = 10,
 			Q = 5,
 			O = 10,
 			S = 5 );
