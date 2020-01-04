@@ -86,24 +86,31 @@ module channel_key_pair( width,
 			 S = 1,
 			 O = 1,
 			 P = 1,
-			 origin = 0 ){
-    color( rand_clr() )
-    channel_lock(width  = width,
-		 height = height,
-		 length = length,
-		 rake   = rake,
-		 Q      = Q,
-		 O      = O,
-		 S      = S );
+			 origin       = 0,
+			 hide_channel = false,
+			 hide_key     = false
+			 ){
+  if( !hide_channel ){
+        color( rand_clr() )
+        channel_lock(width  = width,
+		     height = height,
+		     length = length,
+		     rake   = rake,
+		     Q      = Q,
+		     O      = O,
+		     S      = S );
+  }
 
-    color( rand_clr() )
-      translate( [ (width+clearance), 0, 0 ]  )
-    channel_key(  width  = width,
-		  height = height,
-		  length = length,
-		  Q      = Q + clearance,
-		  O      = O,
-		  S      = S + clearance );
+  if( !hide_key ){
+      color( rand_clr() )
+	translate( [ (width+clearance), 0, 0 ]  )
+	channel_key(  width  = width,
+		      height = height,
+		      length = length,
+		      Q      = Q + clearance,
+		      O      = O,
+		      S      = S + clearance );
+  }
 }
 
 channel_key_pair( width  = 20,
