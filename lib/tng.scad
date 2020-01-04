@@ -8,15 +8,19 @@ Channel lock fitting
 
    B                  C
       +-------------+
-      |             |
-      |             |
+      |             |   ( Q )
+      |         (O) |
       |     E +-----+ D
-      |       |
+      | (P)   |         ( R )
       |     F +-----+ G
-      |             |
-      |             |
+      |             |   ( S )
+      |             |   
    A  +-------------+ H
 
+   C->D  = Q
+   E->F  = P
+   D->G  = R (P=R)
+   G->H  = S
    
 */
 
@@ -33,24 +37,29 @@ h = [ 10, 0  ];
 polygon( [ a, b, c, d, e, f, g, h ] );
 
 
-module channel_lock( width, height, length = 0, gap_h = 1, gap_d = 1, origin = 0 ){
+module channel_lock( width,
+		     height,
+		     length = 0,
+		     Q = 1,
+		     R = 1,
+		     S = 1,
+		     O = 1,
+		     P = 1,		     
+		     origin = 0 ){
 
-     len_cd = height/3;
-     len_ef = height/3;
-     len_gh = height/3;
-     
      points = [
-	  [ origin,        origin ], //A
-	  [ origin,        height ], //B
-	  [ width,         height ], //C
-	  [ width,         height - gap_h ], //D
-	  [ width - gap_d, height - gap_h ], //E
-	  [ width - gap_d, len_gh ], //F
-	  [ width,         len_gh ], //G
-	  [ width,         origin ]
+	  [ origin,    origin     ], //A
+	  [ origin,    height     ], //B
+	  [ width,     height     ], //C
+	  [ width,     height - Q ], //D
+	  [ width - O, height - Q ], //E
+	  [ width - O, origin + S ], //F
+	  [ width,     origin + S ], //G
+	  [ width,     origin     ]  //H
 	  ];
      polygon( points );
 }
 
-translate( [ 20, 0, 0 ] )channel_lock( width  = 10,
-				       height = 10 );
+translate( [ 20, 0, 0 ] )
+channel_lock( width  = 10,
+	      height = 10, Q = 10*0.6, O = 5, S = 10*0.6 );
