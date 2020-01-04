@@ -113,6 +113,50 @@ module channel_key_pair( width,
   }
 }
 
+module mirrored_channel_pairs( width,
+			       height,
+			       length = 1,
+			       rake = 0,
+			       clearance = 1,
+			       Q = 1,
+			       R = 1,
+			       S = 1,
+			       O = 1,
+			       P = 1,
+			       origin       = 0,
+			       hide_channel = false,
+			       hide_key     = false ){
+  translate( [width*2,0,0] ){
+    mirror( [ 1,0,0 ] )
+    channel_key_pair( width  = width,
+		      height = height,
+		      length = length,
+		      rake   = rake,
+		      clearance = clearance,
+		      Q = Q,
+		      O = O,
+		      S = S,
+		      hide_channel = hide_channel,
+		      hide_key     = hide_key
+		      ); }
+
+ translate( [width*2+rake*2,0,0 ]){
+   channel_key_pair( width  = width,
+		     height = height,
+		     length = length,
+		     rake   = rake,
+		     clearance = clearance,
+		     Q = Q,
+		     O = O,
+		     S = S,
+		     hide_channel = hide_channel,
+		     hide_key     = hide_key
+		     );}
+ }
+
+
+///< Test
+if( false ){
 channel_key_pair( width  = 20,
 		  height = 20,
 		  length = 20,
@@ -120,3 +164,14 @@ channel_key_pair( width  = 20,
 		  Q = 5,
 		  O = 10,
 		  S = 5);
+ }
+
+if( true ){
+mirrored_channel_pairs( width  = 20,
+			height = 20,
+			length = 20,
+			rake   = 10,
+			Q = 5,
+			O = 10,
+			S = 5 );
+ }
