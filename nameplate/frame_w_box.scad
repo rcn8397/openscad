@@ -4,7 +4,7 @@ use <../lib/utils.scad>;
 include<nameplate.scad>;
 include<frame.scad>;
 use <../lib/containers.scad>;
-
+use <slide_backing.scad>;
 depth = 25;
 thickness = 6.5;
 
@@ -25,30 +25,12 @@ difference(){
 }
 
 
-///< Lid Slide
-module slide_lid( through_hole = false ){
-     ///< Backing
-     color( rand_clr() ) translate( [ 0, comp_d+thickness+1.10, 0  ] )
-	  cube( [ comp_w, thickness*0.30, comp_h ] );
-     color( rand_clr() ) translate( [ 0, comp_d+thickness-2, thickness * 1.25 ] )
-	  cube( [ comp_w*0.95, thickness*0.50, comp_h*0.75 ] );
-     ///< Slide
-     color( rand_clr() ) translate( [ 0, comp_d, thickness/4  ] )cube( [ comp_w*0.95, thickness * 0.95, comp_h * 0.95 ] );
-
-     ///< Right Wall
-     difference(){
-     color( rand_clr() ) translate( [ 0, comp_d/2, 0 ] )cube( [ thickness,comp_d-thickness + 1,comp_h ] );
-     ///< Wire through hole
-     if( through_hole )color( rand_clr() ) translate( [ 0, comp_d/2, comp_h/2 ] )
-			    rotate( [ 0, 90, 0 ] )cylinder( h = thickness*1.10 , r = comp_d/3);
-     }
-}
 
 module assembly(){
 //union(){
 difference(){
      framebox();
-     color( rand_clr() )slide_lid();
+     color( rand_clr() )slide_lid( as_channel = true, as_key = true);
      }
 }
 

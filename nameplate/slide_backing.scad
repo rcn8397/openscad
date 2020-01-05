@@ -15,7 +15,7 @@ comp_d = nameplate_d + depth;
 comp_h = nameplate_h+thickness;
 
 ///< Lid Slide
-module slide_lid( through_hole = false, as_channel = true ){
+module slide_lid( through_hole = false, as_channel = true, as_key = false ){
      
   back_thickness  = thickness;
   slide_thickness = thickness;
@@ -40,6 +40,7 @@ module slide_lid( through_hole = false, as_channel = true ){
 			       Q = 2,
 			       O = 2,
 			       S = 2,
+			       hide_channel = as_key,
 			       hide_key = as_channel );
      ///< Right Wall
      difference(){
