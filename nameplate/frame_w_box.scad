@@ -2,7 +2,7 @@
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
 include<nameplate.scad>;
-//include<frame.scad>;
+include<frame.scad>;
 
 depth = 25;
 thickness = 6.5;
@@ -85,20 +85,23 @@ module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length
 
 
 
-module slide_box( width, height, key_w, key_h, key_d, bridge, clearance ){
-  slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance );
+module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = 1 ){
+  slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length );
 
   translate( [bridge*2, 0, 0] )
     mirror( [1,0,0] )
-    slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance );
+    slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length );
 }
 
-height = 10;
-key_h  = height*0.90;
+height = comp_d;
 key_d  = 1;
 key_w  = 1;
+key_h  = height-key_w;
 width  = 2;
 clearance = 0.125;
-bridge    = 10;
+bridge    = comp_h/2;
 
-slide_box( width, height, key_w, key_h, key_d, bridge, clearance );
+translate( [0,thickness,0] )
+rotate( [0,90,0])
+mirror( [1,0,0])
+slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = comp_w );
