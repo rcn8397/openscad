@@ -2,7 +2,7 @@
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
 include<nameplate.scad>;
-//include<frame.scad>;
+include<frame.scad>;
 
 depth = 25;
 thickness = 6.5;
@@ -84,11 +84,11 @@ module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length 
 
   ///< Bottom Wall
   color( "pink" ) translate( [ 0, 0, 0 ] )
-    cube( [ bridge*2, key_h-key_w*2-0.1, width ] );
+    cube( [ bridge*2, key_h-key_w*2-0.5, width ] );
 
   ///< Top Wall
   color( "purple" ) translate( [ 0, 0, length-width ] )
-    cube( [ bridge*2, key_h-key_w*2-0.1, width ] );
+    cube( [ bridge*2, key_h-key_w*2-0.5, width ] );
 }
 
 height = comp_d;
@@ -96,10 +96,10 @@ key_d  = 1;
 key_w  = 1;
 key_h  = height-key_w;
 width  = 2;
-clearance = 0.125;
+clearance = 0.5;
 bridge    = comp_h/2;
 
 translate( [0,thickness,0] )
-//rotate( [0,90,0])
-//mirror( [1,0,0])
+rotate( [0,90,0])
+mirror( [1,0,0])
 slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = comp_w );
