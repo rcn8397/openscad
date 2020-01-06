@@ -4,9 +4,9 @@ use <../lib/utils.scad>;
 include<nameplate.scad>;
 include<frame.scad>;
 
+///< Global
 depth = 25;
 thickness = 6.5;
-
 
 ///< Component housing
 comp_w = nameplate_w+thickness;
@@ -86,9 +86,9 @@ module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length 
   color( "pink" ) translate( [ 0, 0, 0 ] )
     cube( [ bridge*2, key_h-key_w*2-0.5, width ] );
 
-  ///< Top Wall
-  color( "purple" ) translate( [ 0, 0, length-width ] )
-    cube( [ bridge*2, key_h-key_w*2-0.5, width ] );
+  ///< Top Wall ( This ought to have a hide so the assembly can be printed without it )
+  color( "purple" ) translate( [ width+clearance, clearance, length-width ] )
+    cube( [ bridge*2-(width*2+clearance*2), key_h-key_w*2-(clearance), width ] );
 }
 
 height = comp_d;
@@ -99,7 +99,7 @@ width  = 2;
 clearance = 0.5;
 bridge    = comp_h/2;
 
-translate( [0,thickness,0] )
+translate( [0,thickness*1.375,0] )
 rotate( [0,90,0])
 mirror( [1,0,0])
 slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = comp_w );
