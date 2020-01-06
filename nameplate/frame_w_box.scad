@@ -2,7 +2,7 @@
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
 include<nameplate.scad>;
-include<frame.scad>;
+//include<frame.scad>;
 
 depth = 25;
 thickness = 6.5;
@@ -12,16 +12,6 @@ thickness = 6.5;
 comp_w = nameplate_w+thickness;
 comp_d = nameplate_d + depth;
 comp_h = nameplate_h+thickness;
-
-module framebox(){
-difference(){
-     translate( [0, thickness*1.2, 0] )cube([ comp_w, comp_d, comp_h ], false );
-     translate( [thickness/2, 0, thickness/2] )
-	  color( rand_clr() )cube([ comp_w-thickness,
-				    (comp_d+thickness)*1.5,
-				    comp_h-thickness ], false );
-     }
-}
 
 module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length = 1) {
      /*          <---(B)---> ...
@@ -91,6 +81,14 @@ module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length 
   translate( [bridge*2, 0, 0] )
     mirror( [1,0,0] )
     slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length );
+
+  ///< Bottom Wall
+  color( "pink" ) translate( [ 0, 0, 0 ] )
+    cube( [ bridge*2, key_h-key_w*2-0.1, width ] );
+
+  ///< Top Wall
+  color( "purple" ) translate( [ 0, 0, length-width ] )
+    cube( [ bridge*2, key_h-key_w*2-0.1, width ] );
 }
 
 height = comp_d;
@@ -102,6 +100,6 @@ clearance = 0.125;
 bridge    = comp_h/2;
 
 translate( [0,thickness,0] )
-rotate( [0,90,0])
-mirror( [1,0,0])
+//rotate( [0,90,0])
+//mirror( [1,0,0])
 slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = comp_w );
