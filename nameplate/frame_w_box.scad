@@ -2,7 +2,7 @@
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
 include<nameplate.scad>;
-include<frame.scad>;
+use <frame.scad>;
 
 ///< Global
 depth = 25;
@@ -13,7 +13,7 @@ comp_w = nameplate_w+thickness;
 comp_d = nameplate_d + depth;
 comp_h = nameplate_h+thickness;
 
-module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length = 1) {
+module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length = 1, hide_wall = false, hide_bridge = false) {
      /*          <---(B)---> ...
        +---+     +-------
    ^   |   |     |
@@ -54,7 +54,9 @@ module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length
 	  [ width,             key_height - key_width ],
 	  [ width,             origin ]
 	  ];
+     if( !hide_wall ){
      linear_extrude( height = length ){ polygon( points ); }
+     }
 
      pad = clearance;
      origin_b = origin + ( width + pad );
@@ -69,26 +71,32 @@ module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length
 		      [ origin_b + bridge_w,  key_height - (key_width * 2)       ], //g
 		      [ origin_b + bridge_w,  key_height + key_width             ], //h
 		     ] ;
+     if( !hide_bridge ){
      color( "lime" )
      linear_extrude( height = length ){ polygon( bridge_points ); }
+     }
 }
 
 
 
-module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = 1 ){
-  slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length );
+module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = 1, hide_walls = false, hide_bridge = false ){
+  slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length, hide_wall = hide_walls, hide_bridge = hide_bridge );
 
   translate( [bridge*2, 0, 0] )
     mirror( [1,0,0] )
-    slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length );
+    slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length, hide_wall = hide_walls, hide_bridge = hide_bridge );
 
+  if( !hide_walls ){
   ///< Bottom Wall
   color( "pink" ) translate( [ 0, 0, 0 ] )
     cube( [ bridge*2, key_h-key_w*2-0.5, width ] );
+  }
 
+  if( !hide_bridge ){
   ///< Top Wall ( This ought to have a hide so the assembly can be printed without it )
   color( "purple" ) translate( [ width+clearance, clearance, length-width ] )
     cube( [ bridge*2-(width*2+clearance*2), key_h-key_w*2-(clearance), width ] );
+  }
 }
 
 height = comp_d;
@@ -99,7 +107,14 @@ width  = 2;
 clearance = 0.5;
 bridge    = comp_h/2;
 
+
+hide_walls  = false;
+hide_bridge = true;
+
+if( !hide_walls ){
+  frame( nameplate_w, nameplate_d, nameplate_h  );
+ }
 translate( [0,thickness*1.375,0] )
 rotate( [0,90,0])
 mirror( [1,0,0])
-slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = comp_w );
+slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = comp_w, hide_walls = hide_walls, hide_bridge = hide_bridge );
