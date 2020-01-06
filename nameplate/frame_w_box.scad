@@ -23,19 +23,19 @@ difference(){
      }
 }
 
-module sbox( w, h, f, p, k, origin = 0, length = 2) {
-     /*
+module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length = 1) {
+     /*          <---(B)---> ...
        +---+     +-------
    ^   |   |     |
-   |   |   |     +--+ ^      
+   |   |   |     +--+ ^
    |   |   +----+   | |
-   |   | <-(P)->|   |(K)  
+   |   | <-(P)->|   |(K)
    |   |   +----+   | |
-  (H)  |   |     +--+ v      
+  (H)  |   |     +--+ v
    |   |   |  ^  |
    |   |   |  |  +-----
-   |   |   | (F)      
-   v   |   |  |            
+   |   |   | (F)
+   v   |   |  |
    (O) +---+  v
 
      <--(W)-->
@@ -46,17 +46,18 @@ module sbox( w, h, f, p, k, origin = 0, length = 2) {
      F: Key Height
      P: Key Depth
      W: Width
+     B: Bridge Width
      */
-  
+
      width      = w;
      height     = h;
      key_width  = k;
      key_height = f; ///< Might need to adjust this ( like safety check )
      key_depth  = p;
      points = [
-	  [ origin,            origin     ], 
-	  [ origin,            height     ], 
-	  [ width,             height     ], 
+	  [ origin,            origin     ],
+	  [ origin,            height     ],
+	  [ width,             height     ],
 	  [ width,             key_height ],
 	  [ width + key_depth, key_height ],
 	  [ width + key_depth, key_height - key_width ],
@@ -65,24 +66,39 @@ module sbox( w, h, f, p, k, origin = 0, length = 2) {
 	  ];
      linear_extrude( height = length ){ polygon( points ); }
 
-     pad = 1;
-     origin_b = origin + ( width + key_depth );
-     chan_t_h = height - key_width;
-     chan_h   = chan_t_h - key_width;
-     chan_b_h = chan_t_h - key_width;
+     pad = clearance;
+     origin_b = origin + ( width + pad );
+     bridge_w = b - clearance;
      bridge_points = [
-		      [ origin_b,             key_height + key_width       ], //a
-		      [ origin_b,             key_height                   ], //b
-		      [ origin_b + key_depth, key_height                   ], //c
-		      [ origin_b + key_depth, key_height - (key_width * 1) ], //d
-		      [ origin_b,             key_height - (key_width * 1) ], //e
-		      [ origin_b,             key_height - (key_width * 2) ], //f
-		      [ origin_b + 20,        key_height - (key_width * 2) ], //g
-		      [ origin_b + 20,        key_height + key_width       ], //h
+		      [ origin_b,             key_height + key_width             ], //a
+		      [ origin_b,             key_height + pad                   ], //b
+		      [ origin_b + key_depth, key_height + pad                   ], //c
+		      [ origin_b + key_depth, key_height - (key_width * 1) - pad ], //d
+		      [ origin_b,             key_height - (key_width * 1) - pad ], //e
+		      [ origin_b,             key_height - (key_width * 2)       ], //f
+		      [ origin_b + bridge_w,  key_height - (key_width * 2)       ], //g
+		      [ origin_b + bridge_w,  key_height + key_width             ], //h
 		     ] ;
-     color( "green" )
+     color( "lime" )
      linear_extrude( height = length ){ polygon( bridge_points ); }
 }
 
 
-sbox( w = 5, h = 20, k = 3, f = 17, p = 2 );
+
+module slide_box( width, height, key_w, key_h, key_d, bridge, clearance ){
+  slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance );
+
+  translate( [bridge*2, 0, 0] )
+    mirror( [1,0,0] )
+    slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance );
+}
+
+height = 10;
+key_h  = height*0.90;
+key_d  = 1;
+key_w  = 1;
+width  = 2;
+clearance = 0.125;
+bridge    = 10;
+
+slide_box( width, height, key_w, key_h, key_d, bridge, clearance );
