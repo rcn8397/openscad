@@ -92,8 +92,8 @@ module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length 
 }
 
 height = comp_d;
-key_d  = 1;
-key_w  = 1;
+key_d  = 2;
+key_w  = 2;
 key_h  = height-key_w;
 width  = 2;
 clearance = 0.5;
