@@ -80,17 +80,25 @@ module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length
 
 
 module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = 1, hide_walls = false, hide_bridge = false ){
-  slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length, hide_wall = hide_walls, hide_bridge = hide_bridge );
-
-  translate( [bridge*2, 0, 0] )
-    mirror( [1,0,0] )
-    slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length, hide_wall = hide_walls, hide_bridge = hide_bridge );
-
   if( !hide_walls ){
   ///< Bottom Wall
+    difference(){
   color( "pink" ) translate( [ 0, 0, 0 ] )
-    cube( [ bridge*2, key_h-key_w*2-0.5, width ] );
+    cube( [ bridge*2, height, width ] );
+  ///< Strike Pad
+  color( "cyan" ) translate( [ width , 0 , width-clearance ] )
+    cube( [ bridge*2-width*2, height, width ] );
+    }
   }
+
+  translate( [ 0, 0, width ] )
+  slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length-width, hide_wall = hide_walls, hide_bridge = hide_bridge );
+
+  translate( [bridge*2, 0, width] )
+    mirror( [1,0,0] )
+    slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length-width, hide_wall = hide_walls, hide_bridge = hide_bridge );
+
+  
 
   if( !hide_bridge ){
   ///< Top Wall ( This ought to have a hide so the assembly can be printed without it )
