@@ -104,12 +104,12 @@ key_d  = 2;
 key_w  = 2;
 key_h  = height-key_w;
 width  = 2;
-clearance = 0.5;
+clearance = 0.3;
 bridge    = comp_h/2;
 
 
 hide_walls  = false;
-hide_bridge = true;
+hide_bridge = false;
 
 if( !hide_walls ){
   frame( nameplate_w, nameplate_d, nameplate_h  );
