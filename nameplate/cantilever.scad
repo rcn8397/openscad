@@ -32,9 +32,25 @@ module cantilever( y, h, b, p, a, l = 1, origin = 0, hide = false ){
      if( !hide ){
      linear_extrude( height = l ){ polygon( points ); }
      }
+}
 
-
-
+module substrate( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0.25, subx = 1, suby = 1 ){
+     
+       points = [
+       [ origin,                          h + sep ],
+       [ origin,                          h + sep + y + subx ],
+       [ origin + b + p + a + sep + suby, h + sep + y + subx ],
+       [ origin + b + p + a + sep + suby, origin ],
+       [ origin + b + p + a + sep,        origin ],
+       [ origin + b + p + a + sep,        h + sep ],
+       [ origin + b + p + sep,            h + sep + y ],
+       [ origin + b - sep,                h + sep + y ],
+       [ origin + b - sep,                h + sep ],
+       ];
+     if( !hide ){
+     linear_extrude( height = l ){ polygon( points ); }
+     }
 }
 
 cantilever( y = 2, h = 2, b = 7, p = 2, a = 2 );
+color( "pink" )substrate(  y = 2, h = 2, b = 7, p = 2, a = 2 );
