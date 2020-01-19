@@ -34,24 +34,29 @@ module cantilever( y, h, b, p, a, l = 1, origin = 0, hide = false ){
      }
 }
 
-module substrate( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0.25, subx = 1, suby = 1 ){
+module substrate( y, h, b, p, a, l = 1, origin = [0,0], hide = false, sep = 0.25, subx = 1, suby = 1 ){
      
        points = [
-       [ origin,                          h + sep + y ],
-       [ origin,                          h + sep + y + subx ],
-       [ origin + b + p + a + sep + suby, h + sep + y + subx ],
-       [ origin + b + p + a + sep + suby, origin ],
-       [ origin + b + p + a + sep,        origin ],
-       [ origin + b + p + a + sep,        h + sep ],
-       [ origin + b + p + sep,            h + sep + y ],
-       [ origin + b - sep,                h + sep + y ],
-       [ origin + b - sep,                h + sep ],
-       [ origin + a,                h + sep ],
+       [ origin[0],                          h + sep + y ],
+       [ origin[0],                          h + sep + y + suby ],
+       [ origin[0] + b + p + a + sep + subx, h + sep + y + suby ],
+       [ origin[0] + b + p + a + sep + subx, origin[1] ],
+       [ origin[0] + b + p + a + sep,        origin[1] ],
+       [ origin[0] + b + p + a + sep,        h + sep ],
+       [ origin[0] + b + p + sep,            h + sep + y ],
+       [ origin[0] + b - sep,                h + sep + y ],
+       [ origin[0] + b - sep,                h + sep ],
+       [ origin[0] + a,                      h + sep ],
        ];
      if( !hide ){
      linear_extrude( height = l ){ polygon( points ); }
      }
 }
 
-color( "violet")cantilever( y = 1, h = 1, b = 4, p = 1, a = 2 );
-color( "pink" )substrate(  y = 1, h = 1, b = 4, p = 1, a = 2 );
+module snap_fit( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0.25, subx = 0.4, suby = 0.4, diffx = 0){
+
+     color( "violet")cantilever( y = y, h = h, b = b+diffx, p = p, a = a );
+     color( "pink" )substrate(   y = y, h = h, b = b,       p = p, a = a, subx = subx, suby = suby, origin = [diffx,0] );
+}
+
+snap_fit( y = 1, h = 1, b = 4, p = 1, a = 2, diffx = 1, subx = 1, suby = 1 );
