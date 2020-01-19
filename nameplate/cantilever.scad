@@ -37,7 +37,7 @@ module cantilever( y, h, b, p, a, l = 1, origin = 0, hide = false ){
 module substrate( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0.25, subx = 1, suby = 1 ){
      
        points = [
-       [ origin,                          h + sep ],
+       [ origin,                          h + sep + y ],
        [ origin,                          h + sep + y + subx ],
        [ origin + b + p + a + sep + suby, h + sep + y + subx ],
        [ origin + b + p + a + sep + suby, origin ],
@@ -46,11 +46,12 @@ module substrate( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0.25, su
        [ origin + b + p + sep,            h + sep + y ],
        [ origin + b - sep,                h + sep + y ],
        [ origin + b - sep,                h + sep ],
+       [ origin + a,                h + sep ],
        ];
      if( !hide ){
      linear_extrude( height = l ){ polygon( points ); }
      }
 }
 
-cantilever( y = 2, h = 2, b = 7, p = 2, a = 2 );
-color( "pink" )substrate(  y = 2, h = 2, b = 7, p = 2, a = 2 );
+color( "violet")cantilever( y = 1, h = 1, b = 4, p = 1, a = 2 );
+color( "pink" )substrate(  y = 1, h = 1, b = 4, p = 1, a = 2 );
