@@ -53,10 +53,10 @@ module substrate( y, h, b, p, a, l = 1, origin = [0,0], hide = false, sep = 0.25
      }
 }
 
-module snap_fit_sub( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0.25, suby = 0.5, hide_sub = false, hide_lever = false ){
+module snap_fit_sub( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0, suby = 0, hide_sub = false, hide_lever = false ){
 
      color( "violet")cantilever( y = y, h = h, b = b, p = p, a = a, hide = hide_lever );
-     color( "pink" )substrate(   y = y, h = h, b = b, p = p, a = a, suby = suby, hide = hide_sub );
+     color( "pink" )substrate(   y = y, h = h, b = b, p = p, a = a, sep = sep, suby = suby, hide = hide_sub );
 }
 
 snap_fit_sub( y = 1, h = 1, b = 6, p = 2, a = 2 );
