@@ -34,39 +34,32 @@ module cantilever( y, h, b, p, a, l = 1, origin = 0, hide = false ){
      }
 }
 
-module substrate( y, h, b, p, a, l = 1, origin = [0,0], hide = false, sep = 0.25, subx = 1, suby = 1 ){
+module substrate( y, h, b, p, a, l = 1, origin = [0,0], hide = false, sep = 0.25, suby = 1 ){
      
        points = [
-       [ origin[0],                          h + sep + y ],
-       [ origin[0],                          h + sep + y + suby ],
-       [ origin[0] + b + p + a + sep + subx, h + sep + y + suby ],
-       [ origin[0] + b + p + a + sep + subx, origin[1] ],
-       [ origin[0] + b + p + a + sep,        origin[1] ],
-       [ origin[0] + b + p + a + sep,        h + sep ],
-       [ origin[0] + b + p + sep,            h + sep + y ],
-       [ origin[0] + b - sep,                h + sep + y ],
-       [ origin[0] + b - sep,                h + sep ],
-       [ origin[0] + a,                      h + sep ],
+       [ origin[0],                h + sep + y ],        //< A
+       [ origin[0],                h + sep + y + suby ], //< B
+       [ origin[0] + b + p + a,    h + sep + y + suby ], //< C
+       [ origin[0] + b + p + a,    origin[1] ],	         //< D
+       [ origin[0] + b + p + a,    origin[1] ],	         //< E
+       [ origin[0] + b + p + a,    h + sep ],	         //< F
+       [ origin[0] + b + p + sep,  h + sep + y ],	 //< G
+       [ origin[0] + b - sep,      h + sep + y ],	 //< H
+       [ origin[0] + b - sep,      h + sep ],	         //< I
+       [ origin[0] + a,            h + sep ],            //< J
        ];
      if( !hide ){
      linear_extrude( height = l ){ polygon( points ); }
      }
 }
 
-module snap_fit_substrate( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0.25, subx = 0.4, suby = 0.4, diffx = 0){
+module snap_fit_sub( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0.25, suby = 0.5, hide_sub = false, hide_lever = false ){
 
-     color( "violet")cantilever( y = y, h = h, b = b+diffx, p = p, a = a );
-     color( "pink" )substrate(   y = y, h = h, b = b,       p = p, a = a, subx = subx, suby = suby, origin = [diffx,0] );
+     color( "violet")cantilever( y = y, h = h, b = b, p = p, a = a, hide = hide_lever );
+     color( "pink" )substrate(   y = y, h = h, b = b, p = p, a = a, suby = suby, hide = hide_sub );
 }
 
-///snap_fit_substrate( y = 1, h = 1, b = 4, p = 1, a = 2, diffx = 1, subx = 1, suby = 1 );
+snap_fit_sub( y = 1, h = 1, b = 6, p = 2, a = 2 );
 
-module snap_fit( y, h, b, p, a, l = 1, origin = 0, hide = false, sep = 0.1){
-     
-     translate( [ b + a + p, h + y + sep + y, 0 ] )
-     rotate( [0,0,180] )
-	  color( "violet")cantilever( y = y, h = h, b = b, p = p, a = a );
-     color( "blue")cantilever( y = y, h = h, b = b, p = p, a = a );
-     }
 
-snap_fit( y = 1, h = 1, b = 4, p = 1.75, a = 2 );
+
