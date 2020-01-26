@@ -3,6 +3,7 @@ use <../lib/math.scad>;
 use <../lib/utils.scad>;
 include<nameplate.scad>;
 use <frame.scad>;
+use <../lib/cantilever.scad>;
 
 ///< Global
 depth = 25;
@@ -98,12 +99,11 @@ module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length 
     mirror( [1,0,0] )
     slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length-width, hide_wall = hide_walls, hide_bridge = hide_bridge );
 
-  
-
   if( !hide_bridge ){
   ///< Top Wall ( This ought to have a hide so the assembly can be printed without it )
   color( "purple" ) translate( [ width+clearance, clearance, length-width ] )
     cube( [ bridge*2-(width*2+clearance*2), key_h-key_w*2-(clearance), width ] );
+  
   }
 }
 
@@ -116,8 +116,19 @@ clearance = 0.3;
 bridge    = comp_h/2;
 
 
-hide_walls  = false;
+b = 3;
+p = 0.5;
+a = 1;
+l = bridge*2-width*4;
+
+
+
+hide_walls  = true;
 hide_bridge = false;
+
+translate( [ b+p+a+width, height+key_w/2, bridge*2-width*2] )rotate( [0,180,0])
+snap_fit_sub( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = l, sep = 0.1, suby = 1, subx = 0.5 );
+
 
 if( !hide_walls ){
   frame( nameplate_w, nameplate_d, nameplate_h  );
