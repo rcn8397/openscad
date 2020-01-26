@@ -64,12 +64,8 @@ module snap_fit_anchor( y, h, b, p, a, l = 1, origin = [0,0], hide = false, sep 
   color( "violet")cantilever( y = y, h = h, b = b, p = p, a = a, l = l, hide = hide_lever );
   color( "pink" )substrate(   y = y, h = h, b = b, p = p, a = a, l = l, sep = sep, suby = suby, subx = subx, hide = hide_sub, origin = [ sep, 0 ] );
  
-  a_points = [
-	      
-	      
-  ];
   cube_w = h+y;
-  cube_h = h+y+sep+suby;
+  cube_h = h+y+sep+suby+sep;
   translate( [-(h+y),0,0] )cube( [ cube_w, cube_h, l ] );
 
 }

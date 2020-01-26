@@ -127,7 +127,7 @@ hide_walls  = true;
 hide_bridge = false;
 
 translate( [ b+p+a+width, height+key_w/2, bridge*2-width*2] )rotate( [0,180,0])
-snap_fit_sub( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = l, sep = 0.1, suby = 1, subx = 0.5 );
+snap_fit_anchor( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = l, sep = 0.1, suby = 1, subx = 0.5 );
 
 
 if( !hide_walls ){
