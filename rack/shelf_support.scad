@@ -60,7 +60,6 @@ module mounts( r = 1, h = 1, points ){
 
 
 module rack_mount( r, h , p, pad = 1 ){
-
      difference(){
 	  hull() mounts( r = r+pad, h = h, points = p );
 	  mounts( r = r, h = h, points = p );
