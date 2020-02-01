@@ -33,21 +33,40 @@ use <../lib/utils.scad>;
 function panel_height_inch( n = 1 ) = (  1.75 * n - 0.031 );
 function panel_height_mm  ( n = 1 ) = ( 44.45 * n - 0.794 );
 
-///< Constants
+///< Constants and Parameters
 rail_face_width    = 15.875;
 mount_spacing      = 15.875;
-first_hole_center  = 6.35;
-middle_hole_center = first_hole_center + mount_spacing;
-top_hole_center    = middle_hole_center + mount_spacing;
+hole_1_center      = 6.35;
+hole_2_center      = hole_1_center + mount_spacing;
+hole_3_center      = hole_2_center + mount_spacing;
+hole_x             = rail_face_width/2;
+hole_d             = 6; ///< M6 screw
+hole_r             = hole_d/2;
 
+mount_points =
+     [
+     [ hole_x, hole_1_center, 0 ],
+     [ hole_x, hole_2_center, 0 ],
+     [ hole_x, hole_3_center, 0 ],
+     ];
 
 
 ///< Modules
-module xz_mount( u, square_holes = false ) ){
-     
-
+module mounts( r = 1, h = 1, points ){
+     for( p = points ){
+	  translate( p ) cylinder( r = r, h=h);
+	  }
 }
 
+
+module rack_mount( r, h , p, pad = 1 ){
+
+     difference(){
+	  hull() mounts( r = r+pad, h = h, points = p );
+	  mounts( r = r, h = h, points = p );
+	  }
+	       
+}
 ///< Build object
-xz_mount();
+rack_mount( hole_r, 1, mount_points, pad = 3 );
 
