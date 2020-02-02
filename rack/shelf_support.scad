@@ -75,33 +75,25 @@ module rack_mount( r, h , p, pad = 1 ){
 	  }	       
 }
 
-module shelf_1u_mount(){
+module shelf_1u_mount( r, points, shelf_points ){
+  ///< Need to turn magic numbers into parameters
+  
   difference(){
     hull(){
-      translate( [ mount_spacing, hole_2_center, hole_1_center ] )cube([ 35, plate_h, 25 ]);
-      rack_mount( hole_r, plate_h, mount_points, pad = 3 );
-    }
-    mounts( hole_r, 30, mount_points );
-  translate( [ 0, 0, plate_h ] ) chamfer( hole_r*3.5, hole_r*4, 25, mount_points );     
+      translate( shelf_points )cube([ 35, plate_h, 25 ]);
+      rack_mount( r, plate_h, points, pad = 3 );
+      }
+    mounts( r, 30, points );
+  translate( [ 0, 0, plate_h ] ) chamfer( r*3.5, r*4, 25, points );     
   }
-  
-
 }
 
 ///< Build object
 //rack_mount( hole_r, 1, mount_points, pad = 3 );
 
-shelf_1u_mount();
-
-///< Chamfer
-  ///cylinder(d1=10, d2=15, h=7);
-/*
-      mounts( r = hole_r,
-	    h = 10,
-	    points = [
-		      [ hole_1_center + mount_spacing, hole_2_center+1, 17],
-		      [ hole_2_center + mount_spacing, hole_2_center+1, 17 ]
-		      ],
-	    rot = [90,0,0]
-	    );
-*/
+shelf_1u_mount(
+	       r            = hole_r,
+	       points       = mount_points,
+	       shelf_points = [ mount_spacing, hole_2_center, 0 ]
+	       
+	       );
