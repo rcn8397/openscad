@@ -34,7 +34,7 @@ function panel_height_inch( n = 1 ) = (  1.75 * n - 0.031 );
 function panel_height_mm  ( n = 1 ) = ( 44.45 * n - 0.794 );
 
 ///< Constants and Parameters
-$fn=60;
+$fn=30;
 rail_face_width    = 15.875;
 mount_spacing      = 15.875;
 hole_1_center      = 6.35;
@@ -76,16 +76,26 @@ module rack_mount( r, h , p, pad = 1 ){
 }
 
 module shelf_1u_mount( r, plate_thickness, points, shelf_points, shelf_dem, chmf = [ 3.5, 4 ], pad = 3 ){
-  ///< Need to turn magic numbers into parameters
-
-  difference(){
-    hull(){
-      translate( shelf_points )cube([ shelf_dem[0], shelf_dem[1], shelf_dem[2] ]);
-      rack_mount( r, plate_thickness, points, pad = pad );
+ difference(){
+     difference(){
+        hull(){
+          translate( shelf_points )cube( shelf_dem );
+          rack_mount( r, plate_thickness, points, pad = pad );
+          }
+        mounts( r, plate_thickness, points );
+      translate( [ 0, 0, plate_thickness ] )
+	   color("pink")chamfer( r*chmf[0], r*chmf[1], shelf_dem[2], points );
       }
-    mounts( r, plate_thickness, points );
-  translate( [ 0, 0, plate_thickness ] ) chamfer( r*chmf[0], r*chmf[1], shelf_dem[2], points );
-  }
+     carve_out = [
+	  shelf_points[ 0 ],
+	  shelf_points[ 1 ]+plate_thickness,
+	  shelf_points[ 2 ]+plate_thickness
+	  ];
+     upper_extension = panel_height_mm( 1 );
+     translate( carve_out )color("cyan") cube( [ shelf_dem[ 0 ],
+				    shelf_dem[1]+upper_extension,
+				    shelf_dem[2] ]);
+     }
 }
 
 ///< Build object
