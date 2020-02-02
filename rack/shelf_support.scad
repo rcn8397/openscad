@@ -16,7 +16,7 @@ use <../lib/utils.scad>;
   h = (44.45n − 0.794) for calculating in millimetres.
 
   Mounting Holes:
-  Threaded holes conform to #12-24 or #10-32
+  Threaded holes conform to M6, #12-24 or #10-32
 
   Width of rail face:
   0.625" ( 15.875mm )
@@ -34,6 +34,7 @@ function panel_height_inch( n = 1 ) = (  1.75 * n - 0.031 );
 function panel_height_mm  ( n = 1 ) = ( 44.45 * n - 0.794 );
 
 ///< Constants and Parameters
+$fn=60;
 rail_face_width    = 15.875;
 mount_spacing      = 15.875;
 hole_1_center      = 6.35;
@@ -42,6 +43,8 @@ hole_3_center      = hole_2_center + mount_spacing;
 hole_x             = rail_face_width/2;
 hole_d             = 6; ///< M6 screw
 hole_r             = hole_d/2;
+plate_h            = 3
+  ;
 
 mount_points =
      [
@@ -52,20 +55,53 @@ mount_points =
 
 
 ///< Modules
-module mounts( r = 1, h = 1, points ){
-     for( p = points ){
-	  translate( p ) cylinder( r = r, h=h);
-	  }
+module mounts( r = 1, h = 1, points, rot = [0,0,0] ){
+  for( p = points ){
+    translate( p ) rotate( rot )cylinder( r = r, h=h);
+  }
 }
 
+
+module chamfer( d1, d2, h, points, rot = [0,0,0] ){
+  for( p = points ){
+    translate( p ) rotate( rot )cylinder(d1=d1, d2=d2, h=h);
+  }
+}
 
 module rack_mount( r, h , p, pad = 1 ){
      difference(){
 	  hull() mounts( r = r+pad, h = h, points = p );
 	  mounts( r = r, h = h, points = p );
-	  }
-	       
+	  }	       
 }
-///< Build object
-rack_mount( hole_r, 1, mount_points, pad = 3 );
 
+module shelf_1u_mount(){
+  difference(){
+    hull(){
+      translate( [ mount_spacing, hole_2_center, hole_1_center ] )cube([ 35, plate_h, 25 ]);
+      rack_mount( hole_r, plate_h, mount_points, pad = 3 );
+    }
+    mounts( hole_r, 30, mount_points );
+  translate( [ 0, 0, plate_h ] ) chamfer( hole_r*3.5, hole_r*4, 25, mount_points );     
+  }
+  
+
+}
+
+///< Build object
+//rack_mount( hole_r, 1, mount_points, pad = 3 );
+
+shelf_1u_mount();
+
+///< Chamfer
+  ///cylinder(d1=10, d2=15, h=7);
+/*
+      mounts( r = hole_r,
+	    h = 10,
+	    points = [
+		      [ hole_1_center + mount_spacing, hole_2_center+1, 17],
+		      [ hole_2_center + mount_spacing, hole_2_center+1, 17 ]
+		      ],
+	    rot = [90,0,0]
+	    );
+*/
