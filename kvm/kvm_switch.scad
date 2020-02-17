@@ -1,6 +1,7 @@
 ///< Object definition
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
+use <../lib/cantilever.scad>;
 
 ///< Parameters
 r = 5.00;
@@ -64,4 +65,26 @@ module kvm_dock(){
      }
 }
 
+module snap_joint( w, h, c ){
+     wo = w - c;
+     p  = w * 0.70;
+     $fn = 90;
+     points = [
+	  [ 0,  0     ],
+	  [ 0,  h     ],
+	  [ wo, h     ],
+	  [ w,  h-c   ],
+	  [ w,  h-c*2 ],
+	  [ wo, h-c*3 ],
+	  [ p,  h-c*3 ],
+	  [ p,  0     ],
+	  ];
+     rotate_extrude()
+     polygon( points );
+}
+
 kvm_dock();
+translate( [ dock_w/2, dock_d+1, dock_h/2 ] )
+rotate( [ -90, 0 , 0 ] )
+snap_joint( w = 5, h = 2, c = 0.5 );
+
