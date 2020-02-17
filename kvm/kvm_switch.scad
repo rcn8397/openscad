@@ -39,6 +39,7 @@ module kvm_switch( width, depth, height, radius,
 }
 
 module kvm_dock_substrate( width, depth, height, round_r = 1 ) {
+     rot = [ 0, 0, 0 ];
      points = [
 	  [ 0,         0, 0 ],
 	  [ 0,     depth, 0 ],
@@ -68,6 +69,7 @@ module kvm_dock(){
 module snap_joint( w, h, c ){
      wo = w - c;
      p  = w * 0.70;
+     d2 = 0.90;
      $fn = 90;
      points = [
 	  [ 0,  0     ],
@@ -79,8 +81,28 @@ module snap_joint( w, h, c ){
 	  [ p,  h-c*3 ],
 	  [ p,  0     ],
 	  ];
-     rotate_extrude()
-     polygon( points );
+
+     inner_points = [
+	  [ 0,        0       ],
+	  [ 0,     h*d2       ],
+	  [ wo*d2, h*d2       ],
+	  [ w*d2,  (h-c)*d2   ],
+	  [ w*d2,  (h-c*2)*d2 ],
+	  [ wo*d2, (h-c*3)*d2 ],
+	  [ p*d2,  (h-c*3)*d2 ],
+	  [ p*d2,  0          ],
+	  ];
+
+
+     difference(){
+	  rotate_extrude()
+	       polygon( points );
+
+	  translate( [ 0, 0, h-h*d2+0.1 ] )
+	       color( "red" )
+	       rotate_extrude()
+	       polygon( inner_points );
+     }
 }
 
 kvm_dock();
