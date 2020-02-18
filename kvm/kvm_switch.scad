@@ -5,7 +5,7 @@ use <../lib/cantilever.scad>;
 
 ///< Parameters
 r = 5.00;
-w = 25.75 - r;
+w = 25.72 - r;
 d = 10;
 h = 38.50;
 
@@ -105,8 +105,14 @@ module snap_joint( w, h, c ){
      }
 }
 
-kvm_dock();
-translate( [ dock_w/2, dock_d+1, dock_h/2 ] )
-rotate( [ -90, 0 , 0 ] )
-snap_joint( w = 5, h = 2, c = 0.5 );
+//kvm_dock();
+
+cube( [ 2, 9.8, 9.8 ] );
+translate( [ 0, 9.8-2, 0 ] )cantilever(y = 1, h = 2, b = 9.8, p = 2, a = 2, l = 9.8 );
+mirror( [0,1,0] )
+cantilever(y = 1, h = 2, b = 9.8, p = 2, a = 2, l = 9.8 );
+
+///< Snap button
+//translate( [ dock_w/2, dock_d+1, dock_h/2 ] )rotate( [ -90, 0 , 0 ] )
+//snap_joint( w = 5, h = 2, c = 0.5 );
 

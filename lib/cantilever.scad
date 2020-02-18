@@ -71,10 +71,11 @@ module snap_fit_anchor( y, h, b, p, a, l = 1, origin = [0,0], hide = false, sep 
 }
 
 
+translate( [ 0, 8, 0 ] )cantilever(y = 1, h = 1-0.1, b = 6, p = 2, a = 2 );
 
-//snap_fit_sub( y = 1, h = 1-0.1, b = 6, p = 2, a = 2, sep = 0.1, suby = 0.1, subx = 0 );
+snap_fit_sub( y = 1, h = 1-0.1, b = 6, p = 2, a = 2, sep = 0.1, suby = 0.1, subx = 0 );
 
-//translate( [ 0, 3, 0 ] )snap_fit_sub( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = 3, sep = 0.1, suby = 1, subx = 0.25 );
+translate( [ 0, 3, 0 ] )snap_fit_sub( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = 3, sep = 0.1, suby = 1, subx = 0.25 );
 
 
 translate( [ 0, 5, 0 ] )snap_fit_anchor( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = 3, sep = 0.1, suby = 1, subx = 0.25 );
