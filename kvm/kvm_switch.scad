@@ -106,11 +106,19 @@ module snap_joint( w, h, c ){
 }
 
 //kvm_dock();
+hole_w = 9.45;
+clip_h = 0.5; ///< Cantilever thickness
+clip_b = 3;
+clip_a = 1;
+clip_y = 0.5;
+clip_p = 1;
+clip_l = hole_w;
+span = hole_w - clip_h * 2;
 
-cube( [ 2, 9.8, 9.8 ] );
-translate( [ 0, 9.8-2, 0 ] )cantilever(y = 1, h = 2, b = 9.8, p = 2, a = 2, l = 9.8 );
+cube( [ 2, span, hole_w ] );
+translate( [ 0, span, 0 ] )cantilever(y = clip_y, h = clip_h, b = clip_b, p = clip_p, a = clip_a, l = clip_l );
 mirror( [0,1,0] )
-cantilever(y = 1, h = 2, b = 9.8, p = 2, a = 2, l = 9.8 );
+cantilever(y = clip_y, h = clip_h, b = clip_b, p = clip_p, a = clip_a, l = clip_l );
 
 ///< Snap button
 //translate( [ dock_w/2, dock_d+1, dock_h/2 ] )rotate( [ -90, 0 , 0 ] )
