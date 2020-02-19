@@ -5,14 +5,14 @@ use <../lib/cantilever.scad>;
 
 ///< Parameters
 r = 5.00;
-w = 25.72 - r;
+w = 26.0 - r;
 d = 10;
-h = 38.50;
+h = 39.00;
 
 ///< Rubber pad
 pad_w = 18.50;
 pad_d =  1.00;
-pad_h = 34.10;
+pad_h = 35.10;
 pad_offset = 2.00;
 
 ///< Dock
@@ -105,7 +105,11 @@ module snap_joint( w, h, c ){
      }
 }
 
-//kvm_dock();
+///< Kvm switch dock
+kvm_dock();
+
+///< Rack Clip
+module rack_clip(){
 hole_w = 9.45;
 clip_h = 0.5; ///< Cantilever thickness
 clip_b = 3;
@@ -115,12 +119,11 @@ clip_p = 1;
 clip_l = hole_w;
 span = hole_w - clip_h * 2;
 
-cube( [ 2, span, hole_w ] );
+cube( [ 1, span, hole_w ] );
 translate( [ 0, span, 0 ] )cantilever(y = clip_y, h = clip_h, b = clip_b, p = clip_p, a = clip_a, l = clip_l );
 mirror( [0,1,0] )
 cantilever(y = clip_y, h = clip_h, b = clip_b, p = clip_p, a = clip_a, l = clip_l );
+}
 
 ///< Snap button
-//translate( [ dock_w/2, dock_d+1, dock_h/2 ] )rotate( [ -90, 0 , 0 ] )
-//snap_joint( w = 5, h = 2, c = 0.5 );
-
+translate( [ 20, dock_d+1, 0 ] )rotate( [ 0, 0 , 90  ] )rack_clip();
