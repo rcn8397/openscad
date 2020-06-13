@@ -29,3 +29,15 @@ echo("Given H=", H, "B=", 4 );
 echo("A=", a_from_hb( H, 4 ) );
 
 echo("Distance from [-1,1] and [3,4] = ", dist_2d( [-1,1],[3,4]) );
+
+///< Find the sum of a vector <vect> starting from <s> and continuing to <i>
+function sumv( vect, i, s=0 ) = ( i == s ? vect[ i ] : vect[ i ] + sumv( vect, i - 1, s ) );
+vec = [ 1, 2, 3, 4 ];
+l = len( vec )-1;
+echo( "Sum vec = ", sumv( vec, l, 0 ) );
+
+///< Find the average of a vector <vect> starting at <s>
+function average( vect, s=0 ) = (len( vect ) == 0 ? 0 : ( sumv( vect, len( vect ) - 1, s )/len(vect) ) );
+echo( "Ave vec = ", average( vec ) );
+vec2 = [];
+echo( "Ave vec2 = ", average( vec2 ) );
