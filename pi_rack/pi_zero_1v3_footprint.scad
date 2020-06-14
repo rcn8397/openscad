@@ -17,7 +17,7 @@ peg_upper_height  = 1;
 peg_lower_height  = 2;
 peg_flair_radius  = m25_radius+0.5;
 peg_relief_radius = m25_radius-0.5;
-peg_gap           = 0.33;
+peg_gap           = 0.25;
 
 ///< Standoff parameters
 standoff_height = 4;

@@ -105,6 +105,6 @@ module peg( top_h, bot_h, top_r, bot_r, sep_w = 0.5 ){
 		 color( rand_clr()) cube( [ sep, 2 * top_r, tot_h ], true );
 	 }
 	 translate( [ 0,0, 0.10 * tot_h ] )
-	     color( rand_clr() )cylinder( h = tot_h, r = bot_r * 0.8 );
+	     color( rand_clr() )cylinder( h = tot_h, r = bot_r * 0.75 );
      }
 }
