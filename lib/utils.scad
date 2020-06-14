@@ -16,3 +16,10 @@ module rotate_about_pt(a, v, pt) {
             translate(-pt)
                 children();   
 }
+
+///< For each child, translate child by <p> point in points
+module foreach_translate(points ){
+	for (p=points){
+		translate(p) children();
+	}
+}

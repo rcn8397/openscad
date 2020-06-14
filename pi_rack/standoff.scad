@@ -23,10 +23,10 @@ standoff_r = peg_cyl_r;
 $fn = 60;
 
 ///< Positional data for standoffs
-points = [ [0,0,0], [40,0,0], [23,-10,0], [60,19,10] ];
+points = [ [0,0,0], [40,0,0], [23,-10,0], [60,19,0] ];
 
 ///< Build object
-object();
+foreach_translate( points )object();
 
 ///< Modules
 module object(){
@@ -37,6 +37,7 @@ module object(){
 					    bot_r = peg_relief_r,
 					    sep_w = peg_gap );
 }
+
 
 module standoff( h, r ){
      ///< Named cylinder
