@@ -17,6 +17,8 @@ module rotate_about_pt(a, v, pt) {
                 children();   
 }
 
+function adjust_z_offset( v, z ) = [for (i=[0:(len(v)-1)]) v[i]+[0,0,z]] ;
+
 ///< For each child, translate child by <p> point in points
 module foreach_translate(points ){
 	for (p=points){

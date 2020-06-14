@@ -26,15 +26,10 @@ $fn = 60;
 points = [ [0,0,0], [0,10,0], [20,10,0], [20,0,0] ];
 plate_h      = 2;
 
-
-plate_bar_1 = [ points[0],points[2]];
-plate_bar_2 = [ points[1],points[3]];
-z_adjust    = [ 0,0,plate_h ];
-
-standoff_pts= [ points[0]+z_adjust,
-		points[1]+z_adjust,
-		points[2]+z_adjust,
-		points[3]+z_adjust ];
+	 
+plate_bar_1  = [ points[0],points[2]];
+plate_bar_2  = [ points[1],points[3]];
+standoff_pts = adjust_z_offset(points,plate_h );
 
 ///< Build object
 union(){
