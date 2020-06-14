@@ -23,13 +23,36 @@ standoff_r = peg_cyl_r;
 $fn = 60;
 
 ///< Positional data for standoffs
-points = [ [0,0,0], [40,0,0], [23,-10,0], [60,19,0] ];
+points = [ [0,0,0], [0,10,0], [20,10,0], [20,0,0] ];
+plate_h      = 2;
+
+
+plate_bar_1 = [ points[0],points[2]];
+plate_bar_2 = [ points[1],points[3]];
+z_adjust    = [ 0,0,plate_h ];
+
+standoff_pts= [ points[0]+z_adjust,
+		points[1]+z_adjust,
+		points[2]+z_adjust,
+		points[3]+z_adjust ];
 
 ///< Build object
-foreach_translate( points )object();
+union(){
+     connector_plate( plate_bar_1, h = plate_h, d = standoff_r );
+     connector_plate( plate_bar_2, h = plate_h, d = standoff_r );
+}
+foreach_translate( standoff_pts ) snap_fit_stand_off();
+
 
 ///< Modules
-module object(){
+module connector_plate(points, h, d ){
+     hull()
+	  foreach_translate(points)
+	  cylinder( h=h, r = d );
+
+}
+
+module snap_fit_stand_off(){
      standoff( standoff_h, standoff_r );
      translate( [ 0, 0, standoff_h ] ) peg( top_h = peg_outer_cyl_h,
 					    bot_h = peg_inner_cyl_h,
