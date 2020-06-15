@@ -10,15 +10,16 @@ use <standoff.scad>;
 */
 
 ///< All Holes M2.5
-m25_radius = 2.5;
+///< The actual diameter is 2.4mm
+m25_radius = 2.4/2.0;
 
 ///< Peg parameters
 peg_upper_height  = 0.8;
 peg_lower_height  = 2;
-peg_flair_radius  = m25_radius-1.125;
-peg_relief_radius = m25_radius-1.25;
-peg_gap           = 0.8;
-peg_wall_percent  = 0.4;
+peg_flair_radius  = m25_radius;
+peg_relief_radius = m25_radius * 0.90;
+peg_gap           = 0.75;
+peg_wall_percent  = 0.6;
 
 ///< Standoff parameters
 standoff_height = 1;
