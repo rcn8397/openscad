@@ -7,6 +7,7 @@ peg_lower_height  = 1;
 peg_flair_radius  = 2;
 peg_relief_radius = 1;
 peg_gap           = 0.33;
+peg_wall_percent  = 0.75;
 
 ///< Standoff parameters
 standoff_height = 2;
@@ -28,7 +29,8 @@ connected_standoffs( points       = points,
 		     peg_lower_h  = peg_lower_height,
 		     peg_flair_r  = peg_flair_radius,
 		     peg_relief_r = peg_relief_radius,
-		     peg_gap      = peg_gap );
+		     peg_gap      = peg_gap,
+                     peg_wall_per = peg_wall_percent);
 
 
 ///< Modules
@@ -40,7 +42,9 @@ module connected_standoffs( points,
 			    peg_lower_h,
 			    peg_flair_r,
 			    peg_relief_r,
-			    peg_gap = 0.33 ){
+			    peg_gap = 0.33,
+                            peg_wall_per = 0.75
+                            ){
      ////< Pulling it together
      plate_bar_1  = [ points[0],points[2]];
      plate_bar_2  = [ points[1],points[3]];
@@ -56,7 +60,8 @@ module connected_standoffs( points,
 			     peg_lower_h     = peg_lower_h,
 			     peg_upper_r     = peg_flair_r,
 			     peg_lower_r     = peg_relief_r,
-			     peg_gap         = peg_gap );
+			     peg_gap         = peg_gap,
+                             peg_per         = peg_wall_per);
 }
 
 
@@ -74,13 +79,15 @@ module snap_fit_standoff(stand_off_h,
 			 peg_lower_h,
 			 peg_upper_r,
 			 peg_lower_r,
-			 peg_gap = 0.33 ){
+			 peg_gap = 0.33,
+                         peg_per = 0.75 ){
      standoff( stand_off_h, stand_off_pad_r );
      translate( [ 0, 0, stand_off_h ] ) peg( top_h = peg_upper_h,
-					    bot_h = peg_lower_h,
-					    top_r = peg_upper_r,
-					    bot_r = peg_lower_r,
-					    sep_w = peg_gap );
+                                             bot_h = peg_lower_h,
+                                             top_r = peg_upper_r,
+                                             bot_r = peg_lower_r,
+                                             sep_w = peg_gap,
+                                             wall_p = peg_per );
 }
 
 
@@ -89,7 +96,7 @@ module standoff( h, r ){
      color( rand_clr() )cylinder( h = h, r = r );
 }
 
-module peg( top_h, bot_h, top_r, bot_r, sep_w = 0.5 ){
+module peg( top_h, bot_h, top_r, bot_r, sep_w = 0.5, wall_p = 0.75 ){
      ///< Peg
      tot_h = top_h + bot_h;
      sep = top_r * sep_w;
@@ -105,6 +112,6 @@ module peg( top_h, bot_h, top_r, bot_r, sep_w = 0.5 ){
 		 color( rand_clr()) cube( [ sep, 2 * top_r, tot_h ], true );
 	 }
 	 translate( [ 0,0, 0.10 * tot_h ] )
-	     color( rand_clr() )cylinder( h = tot_h, r = bot_r * 0.75 );
+	     color( rand_clr() )cylinder( h = tot_h, r = bot_r * wall_p );
      }
 }
