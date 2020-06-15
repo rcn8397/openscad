@@ -13,14 +13,15 @@ use <standoff.scad>;
 m25_radius = 2.5;
 
 ///< Peg parameters
-peg_upper_height  = 1;
+peg_upper_height  = 0.8;
 peg_lower_height  = 2;
-peg_flair_radius  = m25_radius+0.5;
-peg_relief_radius = m25_radius-0.5;
-peg_gap           = 0.25;
+peg_flair_radius  = m25_radius-1.125;
+peg_relief_radius = m25_radius-1.25;
+peg_gap           = 0.8;
+peg_wall_percent  = 0.4;
 
 ///< Standoff parameters
-standoff_height = 4;
+standoff_height = 1;
 standoff_radius = 3.5;
 
 ///< Finish
@@ -33,7 +34,7 @@ hole2 = [ 65 - 3.5, 30 - 3.5, 0 ];
 hole3 = [      3.5, 30 - 3.5, 0 ];
 
 points      = [ hole0, hole1, hole2, hole3 ];
-plate_height = 2;
+plate_height = 1;
 
 ///< Build object
 connected_standoffs( points       = points,
@@ -44,6 +45,7 @@ connected_standoffs( points       = points,
 		     peg_lower_h  = peg_lower_height,
 		     peg_flair_r  = peg_flair_radius,
 		     peg_relief_r = peg_relief_radius,
-		     peg_gap      = peg_gap );
+		     peg_gap      = peg_gap,
+                     peg_wall_per= peg_wall_percent);
 
 
