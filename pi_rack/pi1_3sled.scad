@@ -24,7 +24,7 @@ peg_gap           = 0.75;
 peg_wall_percent  = 0.6;
 
 ///< Standoff parameters
-standoff_height = 1;
+standoff_height = 4;
 standoff_radius = 3.5;
 
 ///< Finish
