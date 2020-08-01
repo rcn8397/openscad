@@ -14,6 +14,10 @@ comp_w = nameplate_w+thickness;
 comp_d = nameplate_d + depth;
 comp_h = nameplate_h+thickness;
 
+///< Magnetic coupling
+mag_r = 6.0;
+mag_d = mag_r * 2;
+
 module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length = 1, hide_wall = false, hide_bridge = false) {
      /*          <---(B)---> ...
        +---+     +-------
@@ -83,12 +87,12 @@ module slide_connect( w, h, f, p, k, b = 1, clearance = 0.25, origin = 0, length
 module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length = 1, hide_walls = false, hide_bridge = false ){
   if( !hide_walls ){
   ///< Bottom Wall
-    difference(){
+  difference(){
   color( "pink" ) translate( [ 0, 0, 0 ] )
-    cube( [ bridge*2, height, width ] );
-  ///< Strike Pad
-  color( "cyan" ) translate( [ width , 0 , width-clearance ] )
-    cube( [ bridge*2-width*2, height, width ] );
+    cube( [ bridge*2, height-key_w*3, width+mag_d ] );
+  ///< Magnet coupling rescess                   Z     X     -Y
+  color( "cyan" ) rotate( [90,0,0] )translate( [ bridge , width+mag_r , -height] )//width-clearance ] )
+      cylinder( h = height, d = mag_d );//[ bridge*2-width*2, height, width ] );
     }
   }
 
@@ -123,11 +127,8 @@ l = bridge*2-width*4;
 
 
 
-hide_walls  = true;
+hide_walls  = false;//true;
 hide_bridge = false;
-
-translate( [ b+p+a+width, height+key_w/2, bridge*2-width*2] )rotate( [0,180,0])
-snap_fit_anchor( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = l, sep = 0.1, suby = 1, subx = 0.5 );
 
 
 if( !hide_walls ){
