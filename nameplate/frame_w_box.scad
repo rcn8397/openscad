@@ -96,12 +96,12 @@ module slide_box( width, height, key_w, key_h, key_d, bridge, clearance, length 
     }
   }
 
-  translate( [ 0, 0, width ] )
-  slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length-width, hide_wall = hide_walls, hide_bridge = hide_bridge );
+  translate( [ 0, 0, 0 ] )
+  slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length, hide_wall = hide_walls, hide_bridge = hide_bridge );
 
-  translate( [bridge*2, 0, width] )
+  translate( [bridge*2, 0, 0] )
     mirror( [1,0,0] )
-    slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length-width, hide_wall = hide_walls, hide_bridge = hide_bridge );
+    slide_connect( w = width, h = height, k = key_w, f = key_h, p = key_d, b = bridge, clearance = clearance, length = length, hide_wall = hide_walls, hide_bridge = hide_bridge );
 
   if( !hide_bridge ){
   ///< Top Wall ( This ought to have a hide so the assembly can be printed without it )
