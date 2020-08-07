@@ -6,7 +6,7 @@ use <frame.scad>;
 use <../lib/cantilever.scad>;
 
 ///< Global
-depth = 25;
+depth = 17;
 thickness = 6.5;
 $fn=60;
 
@@ -16,7 +16,7 @@ comp_d = nameplate_d + depth;
 comp_h = nameplate_h+thickness;
 
 ///< Magnetic coupling
-mag_r = 6.0;
+mag_r = 3.05;
 mag_d = mag_r * 2;
 mag_h = 3.0;
 
@@ -139,8 +139,10 @@ l = bridge*2-width*4;
 
 
 
-hide_walls  = true;
-hide_bridge = false;
+hide_walls  = false;
+//hide_walls  = true;
+//hide_bridge = false;
+hide_bridge = true;
 
 
 if( !hide_walls ){
