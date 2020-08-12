@@ -10,9 +10,9 @@ function mm2in( m ) = ( m / 25.4 );
 /// https://stackoverflow.com/questions/45826208/openscad-rotating-around-a-particular-point
 
 // rotate as per a, v, but around point pt
-module rotate_about_pt(a, v, pt) {
+module rotate_about_pt(z, y, pt) {
     translate(pt)
-        rotate(a,v)
+        rotate([0, y, z ])
             translate(-pt)
                 children();   
 }
