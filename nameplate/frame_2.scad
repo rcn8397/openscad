@@ -27,14 +27,13 @@ esp8266_h = 10;
 
  */
 
-module half_frame( w, d, h, show_nameplate = false ){
-    thickness = 1.0;
-    overhang  = 5.0;
+module half_frame( depth, height, thickness = 1.0, overhang = 5.0, anchor = 4.0 ){
+    h = height;
+    d = depth;
     rise      = overhang + thickness;
-    anchor    = 4.0;
     drop      = thickness + anchor;
-    
-    
+
+    /* Data points */
     Ax = 0.0;                   Ay = 0.0;
     Bx = 0.0;                   By = rise;
     Cx = thickness;             Cy = rise;
@@ -70,6 +69,20 @@ module half_frame( w, d, h, show_nameplate = false ){
     polygon( points );
 }
 
+module whole_frame( d, h ){
+    color( rand_clr() )
+    half_frame( d, h  );
+    translate( [ 0, h, 0 ] )
+        mirror([0,1,0])
+        color( rand_clr() )
+        half_frame( d, h );
+}
+
+module frame( w, d, h ){
+    
+    whole_frame( d, h );
+}
+
 ///< Build object
 echo( nameplate_w, nameplate_d, nameplate_h  );
-half_frame( nameplate_w, nameplate_d, nameplate_h  );
+frame( nameplate_w, nameplate_d, nameplate_h  );
