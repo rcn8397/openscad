@@ -79,8 +79,8 @@ module whole_frame( d, h ){
 }
 
 module frame( w, d, h ){
-    
-    whole_frame( d, h );
+    linear_extrude( height = w )
+        whole_frame( d, h );
 }
 
 ///< Build object
