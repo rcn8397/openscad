@@ -69,20 +69,28 @@ module half_frame( depth, height, thickness = 1.0, overhang = 5.0, anchor = 4.0 
     polygon( points );
 }
 
-module whole_frame( d, h ){
+module whole_frame( d, h, t = 1.0 ){
     color( rand_clr() )
-    half_frame( d, h  );
+        half_frame( d, h, thickness = t  );
     translate( [ 0, h, 0 ] )
         mirror([0,1,0])
         color( rand_clr() )
-        half_frame( d, h );
+        half_frame( d, h, thickness = t );
 }
 
-module frame( w, d, h ){
-    linear_extrude( height = w )
-        whole_frame( d, h );
+module frame( w, d, h, t = 1.0 ){
+    difference(){
+        linear_extrude( height = w )
+            whole_frame( d, h, t = t );
+    
+        ///< LED array
+        echo( "thickness: ", t );
+        rotate( [ 270,270,0] )
+            translate( [0,d+t,0] )
+            led_array( w, 0, h );
+    }
 }
 
 ///< Build object
 echo( nameplate_w, nameplate_d, nameplate_h  );
-frame( nameplate_w, nameplate_d, nameplate_h  );
+frame( nameplate_w, nameplate_d, nameplate_h, 1  );
