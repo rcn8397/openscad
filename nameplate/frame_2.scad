@@ -8,26 +8,26 @@ include <nameplate.scad>
 esp8266_h = 10;
 
 /*
-                                 T
+                                 Bp
                               <---->
-                              F    G
-                              +    +
+                              F    G   Br(idge)
+                              +    +<------>
                               |    | H                I
                               |    +----------------+      ^
               B       C       |                     |      |
           ^     +-----+       |    +--------+       |      |
-          |     |     |       |    |M      L|   W   |   Drop(D)
-          |     |     |       |    |        +<----->+      |
-          |     +<--->+D     E|    |        |       |      |
-      Rise(R)   |  T  +-------+    |        +-------+      v
-          |     |      ^-----^     |       K    ^     J
+          |     |     |       |    |M   ^  L|   W   |   Drop(D)
+          |     |     |       |    |    |   +<----->+      |
+          |     +<--->+D     E|    |  Anchor|       |      |
+      Rise(R)   |  T  +-------+    |    |   +-------+      v
+          |     |      ^-----^     |    V  K    ^     J
           |     |         W        |            | Thickness(T)
           v     +------------------+            v
               A                     N
 
  */
 
-module half_frame( depth, height, thickness = 1.0, overhang = 5.0, anchor = 4.0 ){
+module half_frame( depth, height, Bp = 1.0, Br = 1.0, thickness = 1.0, overhang = 5.0, anchor = 4.0 ){
     h = height;
     d = depth;
     rise      = overhang + thickness;
@@ -40,14 +40,14 @@ module half_frame( depth, height, thickness = 1.0, overhang = 5.0, anchor = 4.0 
     Dx = thickness;             Dy = thickness;
     Ex = thickness+d;           Ey = thickness;
     Fx = thickness+d;           Fy = h/2;
-    Gx = thickness*2+d;         Gy = h/2;
-    Hx = thickness*2+d;         Hy = thickness+drop;
-    Ix = thickness*3+d*2;       Iy = thickness+drop; ///<3 thickness here but not part of diagram
-    Jx = thickness*3+d*2;       Jy = thickness;
-    Kx = thickness*3+d;         Ky = thickness;
-    Lx = thickness*3+d;         Ly = thickness + anchor;
-    Mx = thickness*2+d;         My = thickness + anchor;
-    Nx = thickness*2+d;         Ny = 0.0;
+    Gx = thickness+Bp+d;        Gy = h/2;
+    Hx = thickness+Bp+d;        Hy = thickness+drop;
+    Ix = thickness+Bp+Br+d*2;   Iy = thickness+drop;
+    Jx = thickness+Bp+Br+d*2;   Jy = thickness;
+    Kx = thickness+Bp+Br+d;     Ky = thickness;
+    Lx = thickness+Bp+Br+d;     Ly = thickness + anchor;
+    Mx = thickness+Bp+d;        My = thickness + anchor;
+    Nx = thickness+Bp+d;        Ny = 0.0;
      
     points = [
               [ Ax, Ay ],
@@ -69,28 +69,28 @@ module half_frame( depth, height, thickness = 1.0, overhang = 5.0, anchor = 4.0 
     polygon( points );
 }
 
-module whole_frame( d, h, t = 1.0 ){
+module whole_frame( d, h, Bp = 1.0, Br = 1.0, t = 1.0 ){
     color( rand_clr() )
-        half_frame( d, h, thickness = t  );
+        half_frame( d, h, Bp = Bp, Br = Br, thickness = t  );
     translate( [ 0, h, 0 ] )
         mirror([0,1,0])
         color( rand_clr() )
-        half_frame( d, h, thickness = t );
+        half_frame( d, h, Bp = Bp, Br = Br, thickness = t );
 }
 
-module frame( w, d, h, t = 1.0 ){
+module frame( w, d, h, Bp = 1.0, Br = 1.0, t = 1.0 ){
     difference(){
         linear_extrude( height = w )
-            whole_frame( d, h, t = t );
+        whole_frame( d, h, Bp = Bp, Br = Br, t = t );
     
         ///< LED array
         echo( "thickness: ", t );
         rotate( [ 270,270,0] )
-            translate( [0,d+t,0] )
+            translate( [0,d+Bp,0] )
             led_array( w, 0, h );
     }
 }
 
 ///< Build object
 echo( nameplate_w, nameplate_d, nameplate_h  );
-frame( nameplate_w, nameplate_d, nameplate_h, 1  );
+frame( nameplate_w, nameplate_d, nameplate_h, Bp = 2.0, Br = 3.0, t = 1  );
