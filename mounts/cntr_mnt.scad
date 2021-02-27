@@ -2,6 +2,7 @@
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
 use <../lib/hull.scad>;
+use <../lib/basics.scad>;
 
 ///< Parameters
 w   = 40.00;
@@ -15,9 +16,14 @@ hw_h = 100;
 hw_l = 9.31;
 
 hw_mnts = [
-          [ 4.0,               8.5, 0 ],
+          [ 4.0,                8.5, 0 ],
           [ 4.0 + hw_l + 13.13, 8.5, 0 ],
           ];
+
+wall_mnts = [
+             [ w*1/4, -d/2, 0.0 ],
+             [ w*3/4, -d/2, 0.0 ],
+            ];
 
 module mounting_hole( dia, length, depth ){
        hull(){
@@ -30,10 +36,21 @@ module mounting_hole( dia, length, depth ){
 ///< Modules
 module wall_mount( width, depth, height ){
     difference(){
-     cube( [width, depth, height] );
-     for( p = hw_mnts ){
-         translate( p ) mounting_hole( dia = hw_d, length = hw_l, depth = hw_h );
-         }
+        union(){
+            difference(){
+             cube( [width, depth, height] );
+             for( p = hw_mnts ){
+                 translate( p ) mounting_hole( dia = hw_d, length = hw_l, depth = hw_h );
+                 }
+            }
+            translate([0,depth,0])
+            rotate([0,180,180])  triangle( width, depth, 100);
+        }
+    
+        for( p = wall_mnts ){
+            rotate( [ 90, 0, 0 ] )
+            translate( p ) cylinder( d = hw_d, h = 100, center=true);
+        }
     }
 }        
 
