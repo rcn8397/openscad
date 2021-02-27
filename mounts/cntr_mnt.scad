@@ -14,6 +14,7 @@ $fn = 60;
 hw_d = 4.0;
 hw_h = 100;
 hw_l = 9.31;
+hw_cntr = (hw_l)/2;
 
 hw_mnts = [
           [ 4.0,                8.5, 0 ],
@@ -21,8 +22,8 @@ hw_mnts = [
           ];
 
 wall_mnts = [
-             [ w*1/4, -d/2, 0.0 ],
-             [ w*3/4, -d/2, 0.0 ],
+             [ w*1/4, -d/2, -12.0 ],
+             [ w*3/4, -d/2, -12.0 ],
             ];
 
 module mounting_hole( dia, length, depth ){
@@ -51,6 +52,25 @@ module wall_mount( width, depth, height ){
             rotate( [ 90, 0, 0 ] )
             translate( p ) cylinder( d = hw_d, h = 100, center=true);
         }
+
+        for( p = wall_mnts ){
+            rotate( [90, 0 , ] )
+                translate(p)
+                cylinder( d1 = hw_d*3, d2 = hw_d*2.5, h = 18, center=true );
+        }
+
+        /// Pocket
+        for( p = hw_mnts ){
+            translate( p )
+            translate([0,-10,-height*3])color("Green")cube( [10, 15, 5] );
+        }
+        for( p = hw_mnts ){
+            translate( p )
+                translate([hw_cntr,0,0])
+                cylinder( d = hw_d, h = 10, center=true);
+        }
+
+
     }
 }        
 
