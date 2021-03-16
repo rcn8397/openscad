@@ -119,6 +119,6 @@ shelf_1u_mount(
                r               = hole_r,
                plate_thickness = plate_h,
                points          = mount_points,
-               shelf_points    = [ mount_spacing-10, hole_2_center-10, 0 ],
+               shelf_points    = [ plate_h*0.65, hole_2_center-10, 0 ],
                shelf_dem       = [ 10, plate_h, 15 ]
                );
