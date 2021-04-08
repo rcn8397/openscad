@@ -43,8 +43,7 @@ hole_3_center      = hole_2_center + mount_spacing;
 hole_x             = rail_face_width/2;
 hole_d             = 6.25; ///< M6 screw
 hole_r             = hole_d/2;
-plate_h            = 3
-  ;
+plate_h            = 3;
 
 mount_points =
      [
@@ -103,7 +102,7 @@ module shelf_1u_mount( r, plate_thickness, points, shelf_points, shelf_dem, chmf
         carve_out = [
                      shelf_points[ 0 ],
                      shelf_points[ 1 ]+plate_thickness,
-                     shelf_points[ 2 ]-1//+plate_thickness
+                     shelf_points[ 2 ]-1
                      ];
         upper_extension = panel_height_mm( 1 );
         rotate([0,90,0])
