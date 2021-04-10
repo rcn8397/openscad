@@ -34,7 +34,7 @@ function panel_height_inch( n = 1 ) = (  1.75 * n - 0.031 );
 function panel_height_mm  ( n = 1 ) = ( 44.45 * n - 0.794 );
 
 ///< Constants and Parameters
-$fn=30;
+$fn=120;
 rail_face_width    = 15.875;
 mount_spacing      = 15.875;
 hole_1_center      = 6.35;
@@ -74,49 +74,88 @@ module rack_mount( r, h , p, pad = 1 ){
           }
 }
 
-module mounting_sys( r, plate_thickness, points, chmf, pad ){
+module mounting_sys( r, plate_thickness, points, pad ){
     difference(){
         color(rand_clr())
             rack_mount( r, plate_thickness, points, pad = pad );
         mirror([0,0,1])
             translate([0,0,-50]) /// Infinite
                 mounts( r, plate_thickness+100, points );
-        mirror([0,0,1])
-            translate( [ 0, 0, 0])
-                color("pink")chamfer( chmf[0],
-                                      chmf[1],
-                                      50,    /// Infinite
-                                      points );       
     }
-    
 }
 
-module shelf_1u_mount( r, plate_thickness, points, w, d, h, chmf = [ 12, 20 ], pad = 5 ){
+module xcross( w, d, h, pad = 5 ){
+    pad2  = pad * 2;
+    a     = w+pad2;
+    b     = d+pad2;
+    hyp   = hyp_from_sides( a, b );
+    b_hyp = b/hyp;
+    anga   = asin( b_hyp );
+    angb   = 90 - anga;
+
+    translate( [ 0, 0 , pad ] )
+    rotate( [0,0,-angb])
+        color( "pink" )cube( [ pad, hyp, h ] );
+    translate( [ w, 0 , pad ] )
+        rotate( [0,0,angb])
+        color( "pink" )cube( [ pad, hyp, h ] );
+
+
+}
+
+module cutout( w, h, l ){
+    linear_extrude( l )
+        resize([w,h])circle(d=h);
+}
+
+module faces( w, d, h, pad = 5, inf = 100 ){
+    width = w-pad*2;
+    depth = d-pad*2;
+    
+    /// First face
+    translate( [ 0, pad+depth/2, h/2+pad/2 ] )
+        rotate( [90, 0, 90] )
+        color("pink")
+        cutout( depth, h-pad*2, inf );
+    
+    /// Second face
+    translate( [ pad+width/2, 0, h/2+pad/2 ] )
+        rotate( [-90, 0, 0] )
+        color("purple")
+        cutout( width, h-pad*2, inf );
+
+}
+
+module kvm_1u_mount( r, plate_thickness, points, w, d, h, chmf = [ 12, 20 ], pad = 2.5 ){
+    
     difference(){
         union(){
             shell_w = w + pad;
             shell_h = h + pad;
             shell_d = d + pad;
-            
-            difference(){
-                color("red") cube( [ shell_w, shell_d, shell_h ] );
-                translate( [ pad/2, pad/2, pad ] )
-                    color("cyan") cube( [ w, d, h ] );
-            }
-            translate( [shell_w, 0, 0 ] )
-                mounting_sys( r, plate_thickness, points, chmf, pad );
+                difference(){   
+                    difference(){
+                        color("red") cube( [ shell_w, shell_d, shell_h ] );
+                        translate( [ pad/2, pad/2, pad ] )
+                            color("cyan") cube( [ w, d, h ] );           
+                    }
+                    faces( w, d, h, pad );
+                }
         }
         translate( [ w/2+pad/2, d/2+pad/2, 0 ] )
-            cylinder( r = 25, h*2, true );
+            cylinder( r = 35, h*2, true );
     }
+    translate( [w+pad, d/4-pad*2, 0 ] ) 
+        mounting_sys( r, plate_thickness, points, pad=5 );
+    
 }
 
 ///< Build object
-shelf_1u_mount(
+kvm_1u_mount(
                r               = hole_r,
                plate_thickness = plate_h,
                points          = mount_points,
                w = 83.95,
                d = 75.66,
-               h = 19.06
+               h = 20.0
                );
