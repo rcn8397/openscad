@@ -60,7 +60,6 @@ module mounts( r = 1, h = 1, points, rot = [0,0,0] ){
   }
 }
 
-
 module chamfer( d1, d2, h, points, rot = [0,0,0] ){
   for( p = points ){
     translate( p ) rotate( rot )cylinder(d1=d1, d2=d2, h=h);
@@ -74,80 +73,38 @@ module rack_mount( r, h , p, pad = 1 ){
           }
 }
 
-module mounting_sys( r, plate_thickness, points, pad ){
-    difference(){
-        color(rand_clr())
-            rack_mount( r, plate_thickness, points, pad = pad );
-        mirror([0,0,1])
-            translate([0,0,-50]) /// Infinite
-                mounts( r, plate_thickness+100, points );
+module cutout( w, d, h, pad, center = false ){
+    hull(){
+        cylinder( d=w*0.90, h=d+pad, center = center );
+        translate( [ 0,d,0 ] )
+            cylinder( d=w*0.90, h=d+pad, center = center );
     }
-}
-
-module xcross( w, d, h, pad = 5 ){
-    pad2  = pad * 2;
-    a     = w+pad2;
-    b     = d+pad2;
-    hyp   = hyp_from_sides( a, b );
-    b_hyp = b/hyp;
-    anga   = asin( b_hyp );
-    angb   = 90 - anga;
-
-    translate( [ 0, 0 , pad ] )
-    rotate( [0,0,-angb])
-        color( "pink" )cube( [ pad, hyp, h ] );
-    translate( [ w, 0 , pad ] )
-        rotate( [0,0,angb])
-        color( "pink" )cube( [ pad, hyp, h ] );
-
-
-}
-
-module cutout( w, h, l ){
-    linear_extrude( l )
-        resize([w,h])circle(d=h);
-}
-
-module faces( w, d, h, pad = 5, inf = 100 ){
-    width = w-pad*2;
-    depth = d-pad*2;
-    
-    /// First face
-    translate( [ 0, pad+depth/2, h/2+pad/2 ] )
-        rotate( [90, 0, 90] )
-        color("pink")
-        cutout( depth, h-pad*2, inf );
-    
-    /// Second face
-    translate( [ pad+width/2, 0, h/2+pad/2 ] )
-        rotate( [-90, 0, 0] )
-        color("purple")
-        cutout( width, h-pad*2, inf );
-
 }
 
 module kvm_1u_mount( r, plate_thickness, points, w, d, h, chmf = [ 12, 20 ], pad = 2.5 ){
-    
+    shell_w = w + pad;
+    shell_h = h + pad;
+    shell_d = d + pad;
+
     difference(){
         union(){
-            shell_w = w + pad;
-            shell_h = h + pad;
-            shell_d = d + pad;
-                difference(){   
-                    difference(){
-                        color("red") cube( [ shell_w, shell_d, shell_h ] );
-                        translate( [ pad/2, pad/2, pad ] )
-                            color("cyan") cube( [ w, d, h ] );           
-                    }
-                    faces( w, d, h, pad );
+            difference(){
+                difference(){
+                    color("red") cube( [ shell_w, shell_d, shell_h ] );
+                    translate( [ pad/2, pad/2, pad ] )
+                        color("cyan") cube( [ w, d, h ] );
                 }
+            }
         }
-        translate( [ w/2+pad/2, d/2+pad/2, 0 ] )
-            cylinder( r = 35, h*2, true );
+        translate( [ -pad/2, d/2, h/2 ] )
+            rotate( [ 0,90,0 ] )
+            cylinder( d = d*0.75, w+pad*2, true );
+        translate( [ w/2+pad/2, 0, h/4-pad*2 ] )
+            rotate( [-90,180,0] )
+            cutout(w,d,h, pad, false);
+        translate( [ w/2-r*2, d/4-pad*2, 0 ] )        
+            mounts( r, pad, points );
     }
-    translate( [w+pad, d/4-pad*2, 0 ] ) 
-        mounting_sys( r, plate_thickness, points, pad=5 );
-    
 }
 
 ///< Build object
@@ -155,7 +112,7 @@ kvm_1u_mount(
                r               = hole_r,
                plate_thickness = plate_h,
                points          = mount_points,
-               w = 83.95,
-               d = 75.66,
-               h = 20.0
+               w = 20.00,
+               d = 84.00,
+               h = 75.66
                );
