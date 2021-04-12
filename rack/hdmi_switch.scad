@@ -2,7 +2,6 @@
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
 
-
 /*
   Rack Unit overview
   https://en.wikipedia.org/wiki/Rack_unit
@@ -34,17 +33,51 @@ function panel_height_inch( n = 1 ) = (  1.75 * n - 0.031 );
 function panel_height_mm  ( n = 1 ) = ( 44.45 * n - 0.794 );
 
 ///< Constants and Parameters
-$fn=120;
+
+// Finish
+$fn=120; // [30:30:120]
+
+// Rail face width
 rail_face_width    = 15.875;
+
+// Mount spacing
 mount_spacing      = 15.875;
+
+// Center line of hole 1
 hole_1_center      = 6.35;
-hole_2_center      = hole_1_center + mount_spacing;
-hole_3_center      = hole_2_center + mount_spacing;
-hole_x             = rail_face_width/2;
-hole_d             = 6.25; ///< M6 screw
-hole_r             = hole_d/2;
+
+// Hole diameter for rack mount (M6 screw)
+hole_d             = 6.25; // [0:0.01:10]
+
+// Plate height
 plate_h            = 3;
 
+// HDMI Switch Width
+hdmi_w = 21.00; // [0:0.01:200]
+
+// HDMI Switch Depth
+hdmi_d = 76.00; // [0:0.01:200]
+
+// HDMI Switch Height
+hdmi_h = 90.00; // [0:0.01:200]
+
+// Padding
+pad = 2.5; // [0:0.1:10]
+
+
+///< Parameters after this are hidden from the customizer
+module __Customizer_Limit__(){}
+
+// XY offsets for holes
+hole_x             = rail_face_width/2;
+hole_2_center      = hole_1_center + mount_spacing;
+hole_3_center      = hole_2_center + mount_spacing;
+
+// Hole radius
+hole_r             = hole_d/2;
+
+
+// Mounting points
 mount_points =
      [
      [ hole_x, hole_1_center, 0 ],
@@ -76,9 +109,16 @@ module rack_mount( r, h , p, pad = 1 ){
 module cutout( w, d, h, pad, center = false ){
     hull(){
         cylinder( d=w*0.90, h=d+pad, center = center );
-        translate( [ 0,d,0 ] )
+        translate( [ 0,h*0.65,0 ] )
             cylinder( d=w*0.90, h=d+pad, center = center );
     }
+}
+
+module ziptie( w,d,h, pad ){
+    translate( [-pad/2,d*0.75,h-pad/2] )
+        cube([w+pad*2, 3, 2]);
+    translate( [-pad/2,d*0.25,h-pad/2] )
+        cube([w+pad*2, 3, 2]);
 }
 
 module kvm_1u_mount( r, plate_thickness, points, w, d, h, chmf = [ 12, 20 ], pad = 2.5 ){
@@ -86,6 +126,7 @@ module kvm_1u_mount( r, plate_thickness, points, w, d, h, chmf = [ 12, 20 ], pad
     shell_h = h + pad;
     shell_d = d + pad;
 
+    //union(){ // Debug
     difference(){
         union(){
             difference(){
@@ -104,7 +145,9 @@ module kvm_1u_mount( r, plate_thickness, points, w, d, h, chmf = [ 12, 20 ], pad
             cutout(w,d,h, pad, false);
         translate( [ w/2-r*2, d/4-pad*2, 0 ] )        
             mounts( r, pad, points );
+        ziptie( w, d, h, pad );
     }
+
 }
 
 ///< Build object
@@ -112,7 +155,8 @@ kvm_1u_mount(
                r               = hole_r,
                plate_thickness = plate_h,
                points          = mount_points,
-               w = 20.00,
-               d = 84.00,
-               h = 75.66
+               w = hdmi_w,
+               d = hdmi_d,
+               h = hdmi_h,
+               pad = pad
                );
