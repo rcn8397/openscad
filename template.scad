@@ -2,14 +2,38 @@
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
 
-///< Parameters
-x = 1;
-y = 1;
-z = 1;
 
-h = 1;
-w = 1;
-d = 1;
+/*
+Module: Name
+   Preamble and description
+
+*/
+
+/*
+Parameters
+*/
+
+// X Position
+x = 1; // [0:1:100]
+
+// Y Position
+y = 1; // [0:1:100]
+
+// Z Position
+z = 1; // [0:1:100]
+
+// Width
+w = 1; // [0:1:100]
+
+// Depth
+d = 1; // [0:1:100]
+
+// Height
+h = 1; // [0:1:100]
+
+///< Parameters after this are hidden from the customizer
+module __Customizer_Limit__(){}
+
 
 ///< Modules
 module object( height, width, depth ){
