@@ -70,12 +70,13 @@ mnt_hole_points = [
 // Mount thickness
 mnt_thickness = 5.00;
 // Mount Chamfer Diameter
-mnt_chmfr_d = mnt_hole_d;
+mnt_chmfr_d1 = 7;
+mnt_chmfr_d2 = 12; //mnt_chmfr_d1 * 2;
 // Mount Chamfer Height
 mnt_chmfr_h = wallmnt_d;
 // Mount Chamfer Points
 mnt_chmfr_points = [
-                    [wallex_w/2.0,mnt_thickness+wallex_d,-wallex_h/4],
+                    [wallex_w/2.0,mnt_thickness,         -wallex_h/4],
                     [wallex_w/2.0,mnt_thickness+wallex_d, wallex_h/4],
                     ];
 
@@ -108,11 +109,11 @@ module mounting_holes( points, d, h, center = false ){
     }
 }
 
-module mounting_chamfer( points, d, h, center = false ){
+module mounting_chamfer( points, d1, d2, h, center = false ){
     for( p = points ){
         translate( p )
             rotate( [-90,0,0] )
-            cylinder( d1 = d, d2 = d*1.50, h = h, center = center );
+            cylinder( d1 = d1, d2 = d2, h = h, center = center );
     }
 }
 
@@ -143,14 +144,14 @@ module wall_mount( width, depth, height ){
 
 ///< Build object
 //wall_extrusion( wallex_w, wallex_d, wallex_h, wallex_hd, wallex_hl, wallex_hp );
-//difference(){
-//    wall_mount( wallmnt_w, wallmnt_d, wallmnt_h );
-//    color( "purple" )
-//        #adjustable_holes( slide_hole_pts1, slide_hole_d, slide_hole_h );
-//        #adjustable_holes( slide_hole_pts2, slide_hole_d, slide_hole_h );
+difference(){
+    wall_mount( wallmnt_w, wallmnt_d, wallmnt_h );
+    color( "purple" )
+        #adjustable_holes( slide_hole_pts1, slide_hole_d, slide_hole_h );
+        #adjustable_holes( slide_hole_pts2, slide_hole_d, slide_hole_h );
     color( "teal" )
         #mounting_holes( mnt_hole_points, mnt_hole_d, mnt_hole_h );
     color( "green")
-    mounting_chamfer( mnt_chmfr_points, mnt_chmfr_d, mnt_chmfr_h );
-    //}
+        mounting_chamfer( mnt_chmfr_points, mnt_chmfr_d1, mnt_chmfr_d2, mnt_chmfr_h );
+}
                            
