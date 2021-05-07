@@ -35,7 +35,7 @@ wallex_hp = [
 // Wall mount width (X)
 wallmnt_w = 45.0; // [0:0.01:300]
 // Wall mount depth (Y)
-wallmnt_d = 75.72; // [0:0.01:100] 
+wallmnt_d = 75.72; // [0:0.01:100]
 // Wall mount height (Z)
 wallmnt_h = 38.36; // [0:0.01:100]
 
@@ -114,7 +114,7 @@ module __Customizer_Limit__(){}
 module hole_pattern( d, h, points, center = true ){
     for( p = points ){
         rotate( [90,0,0] )
-        translate( p )            
+        translate( p )
             cylinder( d = d, h  = h, center = center );
     }
 }
@@ -166,7 +166,7 @@ module adjustable_holes( points, d, h, center = true ){
 module wall_mount( width, depth, height ){
     diag = sqrt( pow( depth, 2 ) + pow( height, 2 ) );
     angle = asin( height / diag );
-    
+
     difference(){
         color( "orange" )
             translate( [ wallex_w/4, 0.01, -wallex_h/2 ] )
@@ -194,5 +194,4 @@ difference(){
        slide_mounting_chamfer( sld_chmfr_pts1, sld_chmfr_d1, sld_chmfr_d2, sld_chmfr_h );
    color( "green")
        slide_mounting_chamfer( sld_chmfr_pts2, sld_chmfr_d1, sld_chmfr_d2, sld_chmfr_h );
-
-}                           
+}
