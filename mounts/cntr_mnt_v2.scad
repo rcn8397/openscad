@@ -45,7 +45,7 @@ slide_hole_w = 5.0; // [0:0.1:50]
 // Slide Hole Length
 slide_hole_l = 1.0; // [0:0.1:50]
 // Slide Hole Diameter
-slide_hole_d = 2.5; // [0: 0.01: 10 ]
+slide_hole_d = 3.25; // [0: 0.01: 10 ]
 // Slide Hole Height
 slide_hole_h = 100; // [0: 1: 100 ]
 
@@ -62,7 +62,7 @@ slide_hole_pts2 =  [
 
 // Mounting Parameters
 // Mount Hole Diameter
-mnt_hole_d = 6.0; // [ 2 : 0.01: 7 ]
+mnt_hole_d = 3.25; // [ 2 : 0.01: 7 ]
 // Mount Hole Height
 mnt_hole_h = wallmnt_d*2;  // [ 5: 1: 100 ]
 // Mount Hole points
@@ -76,9 +76,9 @@ mnt_thickness = 5.00; // [0:1:50]
 
 // Mount Chamfer Parameters
 // Mount Chamfer Diameter1
-mnt_chmfr_d1  = 7;  // [0:1:100]
+mnt_chmfr_d1  = 7.75;  // [0:0.01:100]
 // Mount Chamfer Diameter2
-mnt_chmfr_d2  = 12; // [0:1:100]
+mnt_chmfr_d2  = 14; // [0:0.01:100]
 // Mount Chamfer Height
 mnt_chmfr_h = wallmnt_d;
 // Mount Chamfer Points
@@ -89,11 +89,11 @@ mnt_chmfr_points = [
 
 // Slide Chamfer Parameters
 // Slide Chamfer Diameter1
-sld_chmfr_d1  = 7;  // [0:1:100]
+sld_chmfr_d1  = 7.15;  // [0:0.01:100]
 // Slide Chamfer Diameter2
-sld_chmfr_d2  = 12; // [0:1:100]
+sld_chmfr_d2  = 12;    // [0:0.01:100]
 // Slide Chamfer Height
-sld_chmfr_h = 100;
+sld_chmfr_h = 100;     // [0:1:100]
 // Mount Chamfer Points
 sld_chmfr_pts1 = [
                  [ wallex_w*1/4+slide_hole_w,              wallex_d + 5.0, wallex_h/2-mnt_thickness ],
