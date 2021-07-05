@@ -43,15 +43,15 @@ wallmnt_h = 38.36; // [0:0.01:100]
 // Slide Hole Width
 slide_hole_w = 5.0; // [0:0.1:50]
 // Slide Hole Length
-slide_hole_l = 1.0; // [0:0.1:50]
+slide_hole_l = 7.0; // [0:0.1:50]
 // Slide Hole Diameter
 slide_hole_d = 4.55; // [0: 0.01: 10 ]
 // Slide Hole Height
 slide_hole_h = 100; // [0: 1: 100 ]
 // Slide Hole Y Offset
-slide_hole_y = 8.5; // [0: 0.1: 100]
+slide_hole_y = 6.1; // [0: 0.1: 100]
 // Slide Hole X Offset
-slide_hole_x = 0;   // [0: 0.1: 100]
+slide_hole_x = 1;   // [0: 0.1: 100]
 
 
 slide1_x0 = wallex_w*1/4+slide_hole_w+slide_hole_x;
@@ -102,12 +102,13 @@ mnt_chmfr_points = [
 // Slide Chamfer Diameter1
 sld_chmfr_d1  = 8.5;  // [0:0.01:100]
 // Slide Chamfer Diameter2
-sld_chmfr_d2  = 16;    // [0:0.01:100]
+sld_chmfr_d2  = 15;    // [0:0.01:100]
 // Slide Chamfer Height
 sld_chmfr_h = 100;     // [0:1:100]
 
 sld_chmfr1_x0 = wallex_w*1/4+slide_hole_w+slide_hole_x;
 sld_chmfr1_x1 = wallex_w*1/4+slide_hole_w+slide_hole_l+slide_hole_x;
+
 sld_chmfr2_x0 = wallex_w*1/4+wallmnt_w-(slide_hole_w+slide_hole_x);
 sld_chmfr2_x1 = wallex_w*1/4+wallmnt_w-(slide_hole_w+slide_hole_l+slide_hole_x);
     
@@ -119,7 +120,7 @@ sld_chmfr_pts1 = [
 
 sld_chmfr_pts2 = [
                  [ sld_chmfr2_x0, wallex_d + slide_hole_y, wallex_h/2-mnt_thickness ],
-                 [ sld_chmfr2_x0, wallex_d + slide_hole_y, wallex_h/2-mnt_thickness ],
+                 [ sld_chmfr2_x1, wallex_d + slide_hole_y, wallex_h/2-mnt_thickness ],
                  ];
 
 
