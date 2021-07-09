@@ -13,6 +13,10 @@ function a_from_hb( h, b ) = sqrt( pow( h, 2 ) - pow( b, 2 ) );
 function dist_2d( pt2, pt1 ) = sqrt(pow(( pt2[0]-pt1[0] ),2) + pow(( pt2[1]-pt1[1]),2) );
 
 function mid_pt_2d( pt2, pt1 ) = [( pt1[0]+pt2[0] )/2, ( pt1[1]+pt2[1] )/2, 0 ];
+
+function opposite_side_th( theta, hypotenuse ) = sin( theta )*hypotenuse ;
+function adjacent_side_th( theta, hypotenuse ) = cos( theta )*hypotenuse ;
+
 ///< Test for math functions
 
 A = 3;
@@ -29,6 +33,9 @@ echo("Given H=", H, "B=", 4 );
 echo("A=", a_from_hb( H, 4 ) );
 
 echo("Distance from [-1,1] and [3,4] = ", dist_2d( [-1,1],[3,4]) );
+
+echo( "Opposite = ", opposite_side_th( 39.0, 30 ), "Theta = ", 39.0, "Hypotenuse = ", 30 );
+echo( "Adjacent = ", adjacent_side_th( 60.0, 10 ), "Theta = ", 60.0, "Hypotenuse = ", 10 );
 
 ///< Find the sum of a vector <vect> starting from <s> and continuing to <i>
 function sumv( vect, i, s=0 ) = ( i == s ? vect[ i ] : vect[ i ] + sumv( vect, i - 1, s ) );
