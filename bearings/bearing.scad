@@ -15,11 +15,11 @@ Parameters
 $fn = 60;
 
 // Race Parameters
-inner_race_x = 10.5; // [0:01:100]
-outter_race_x = 19.5; // [0:01:100]
+inner_race_x = 10.0; // [0:01:100]
+outter_race_x = 20.0; // [0:01:100]
 race_w = 5;     // [0:01:100]
 race_h = 7;     // [0:01:100]
-ball_r = 3.5;   // [0:01:100]
+ball_r = 3.125;   // [0:01:100]
 
 
 ///< Parameters after this are hidden from the customizer
@@ -27,7 +27,7 @@ module __Customizer_Limit__(){}
 
 
 ///< Modules
-module bearing( inner_race_x, outter_race_x, w, h, ball_r, num_balls = 10 ){
+module bearing( inner_race_x, outter_race_x, w, h, ball_r, num_balls = 12 ){
     race_way = (inner_race_x + (outter_race_x - inner_race_x)/2.0);
     rotate_extrude(){
         difference(){
@@ -37,7 +37,7 @@ module bearing( inner_race_x, outter_race_x, w, h, ball_r, num_balls = 10 ){
                 translate([ outter_race_x, 0, 0 ])
                     square( [w, h], center =true );
             }
-        translate( [ race_way, 0, 0 ] )circle( ball_r );
+        translate( [ race_way, 0, 0 ] )circle( ball_r*1.019 );
         }
     }
     ball_tot  = 360;
