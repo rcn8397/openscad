@@ -34,7 +34,8 @@ joint_d           = 50.0;  // [0:1:500]
 thickness         = 5.0;   // [0:1:100]
 // Height
 height            = 20.0;  // [0:0.01:500]
-
+// Hollow Anchor
+hollow_anchor     = false;
 
 
 ///< Parameters after this are hidden from the customizer
@@ -115,11 +116,16 @@ module right_triangle(x=0, y=0, w = 5,d= 5, h=20, t=thickness){
             [x+(w*(d-t))/d,y+(d-t)], // 5 
             ];
     linear_extrude( height = h ){
-        difference(){
+        if( hollow_anchor){
+            difference(){
+                polygon( points = pts );
+                color("red")
+                    translate( [0, t/2, 0 ] )
+                    polygon( points = pts2 );
+            }
+        }
+        else{
             polygon( points = pts );
-            color("red")
-                translate( [0, t/2, 0 ] )
-                polygon( points = pts2 );
         }
     }
 }
