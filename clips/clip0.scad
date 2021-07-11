@@ -14,28 +14,35 @@ Parameters
 // Finish
 $fn = 60;
 
-// Deflector Radius
-deflect_rad       = 7.0;   // [0:1:360]
+//// Deflector Radius
+//deflect_rad       = 1.5;   // [0:0.1:360]
 // Receptacle Radius
-receptacle_rad    = 50.0;  // [0:1:360]
+receptacle_rad    = 10.0;  // [0:1:360]
 // Receptacle Base Width
-receptacle_base_w = 100.0; // [0:1:500]
+receptacle_base_w = 10.0; // [0:1:500]
 // Receptacle Base Depth
-receptacle_base_d = 10.0;  // [0:1:500]
+receptacle_base_d = 5.0;  // [0:1:500]
 // Anchor Base Width
-anchor_base_w     = 100.0; // [0:1:500]
+anchor_base_w     = 10.0; // [0:1:500]
 // Anchor Base Depth
-anchor_base_d     = 10.0;  // [0:1:500]
+anchor_base_d     = 5.0;  // [0:1:500]
 // Joint Width
-joint_w           = 50.0;  // [0:1:500]
+joint_w           = 5.0;  // [0:1:500]
 // Join Depth
-joint_d           = 50.0;  // [0:1:500]
+joint_d           = 5.0;  // [0:1:500]
 // Thickness
-thickness         = 5.0;   // [0:1:100]
+thickness         = 1.0;   // [0:0.1:100]
 // Height
-height            = 20.0;  // [0:0.01:500]
+height            = 10.0;  // [0:0.01:500]
 // Hollow Anchor
 hollow_anchor     = false;
+// Show Anchor
+show_anchor       = true;
+// Show Receptacle
+show_receptacle   = true;
+// Print Mode
+print_mode        = false;
+
 
 
 ///< Parameters after this are hidden from the customizer
@@ -45,6 +52,8 @@ deflect_x      = opposite_side_th( deflect_ang, receptacle_rad );
 deflect_y      = adjacent_side_th( deflect_ang, receptacle_rad );
 joint_y        = receptacle_rad-0.25-thickness*2-joint_d/4;
 anchor_y       = joint_y+joint_d;
+deflect_rad    = thickness*1.5;   // [0:0.1:360]
+
 
 ///< Modules
 module receptacle(r = receptacle_rad, x = deflect_x, y = deflect_y, h = height, t = thickness ){
@@ -55,9 +64,13 @@ module receptacle(r = receptacle_rad, x = deflect_x, y = deflect_y, h = height, 
                 circle( r = r);
                 circle( r = (r - t));
             }
-            translate( [ -r, y, 0 ] )
-                square( [ r*2, r/2 ] );
+            translate( [ -r, deflect_y-t/2, 0 ] )
+                #square( [ r*2, r/2 ] );
         }
+
+        translate( [ -t, -r, 0] )
+            color("blue")
+            square( [ t*2, t*2.125 ] );
     }
 }
 
@@ -140,13 +153,28 @@ module joint( x=0, y=joint_y, w = joint_w,d=joint_d,h=height,t=thickness){
 }
 
 
-union(){
-    receptacle();
-    deflectors();
-    receptacle_base();
-}
-union(){
-    anchor();
-    joint();
-    anchor_base();
-}
+if( show_receptacle ){
+    union(){
+        receptacle();
+        deflectors();
+        receptacle_base();
+    }
+ }
+if( show_anchor && !print_mode ){
+    union(){
+        anchor();
+        joint();
+        anchor_base();
+    }
+ }
+
+if( print_mode ){
+    translate( [receptacle_rad*2,0,0] ){
+        union(){
+            anchor();
+            joint();
+            anchor_base();
+        }
+    }
+ }
+    
