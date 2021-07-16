@@ -1,11 +1,10 @@
 ///< Object definition
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
-
+use <../lib/hull.scad>;
 
 /*
-Module: clip0
-Bull ring clip
+Module: Bull ring clip
 */
 
 /*
@@ -101,6 +100,14 @@ module deflectors( r = deflect_rad, x = deflect_x, y = deflect_y, h = height, t 
     }
 }
 
+module right_angle_mount( x = receptacle_rad, y = -receptacle_rad-receptacle_base_d/2, plate_diameter = receptacle_base_d, holes_diameter = 2.5, t = thickness){
+    hole_pts = [
+                [-x, y, t/2],
+                [ x, y, t/2],
+                ];
+    plate( hole_pts, plate_diameter, t, holes_diameter);
+}
+
 module anchor( r = receptacle_rad, h = height, t = thickness ){
     color("pink")
     linear_extrude( height = h ){
@@ -152,12 +159,23 @@ module joint( x=0, y=joint_y, w = joint_w,d=joint_d,h=height,t=thickness){
     }
 }
 
+module anchor_mount( x =receptacle_rad, y = height, plate_diameter = receptacle_base_d, holes_diameter = 2.5, t = thickness){
+    //z = anchor_base_d + joint_d+t;
+    z = anchor_base_d + anchor_y-t/2;
+    hole_pts = [
+                [-x, y/2, -z ],
+                [ x, y/2, -z ],
+                ];
+    rotate( [ 90, 0, 0] )
+        plate( hole_pts, plate_diameter, t, holes_diameter);
+}
 
 if( show_receptacle ){
     union(){
         receptacle();
         deflectors();
         receptacle_base();
+        right_angle_mount();
     }
  }
 if( show_anchor && !print_mode ){
@@ -165,6 +183,7 @@ if( show_anchor && !print_mode ){
         anchor();
         joint();
         anchor_base();
+        anchor_mount();
     }
  }
 
@@ -174,6 +193,7 @@ if( print_mode ){
             anchor();
             joint();
             anchor_base();
+            anchor_mount();
         }
     }
  }
