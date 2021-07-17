@@ -100,7 +100,8 @@ module deflectors( r = deflect_rad, x = deflect_x, y = deflect_y, h = height, t 
     }
 }
 
-module right_angle_mount( x = receptacle_rad, y = -receptacle_rad-receptacle_base_d/2, plate_diameter = receptacle_base_d, holes_diameter = 2.5, t = thickness){
+module right_angle_mount( x = receptacle_rad, y = -receptacle_rad-receptacle_base_d/2, holes_diameter = 3.5, t = thickness){
+    plate_diameter = holes_diameter + thickness*2;
     hole_pts = [
                 [-x, y, t/2],
                 [ x, y, t/2],
@@ -159,8 +160,9 @@ module joint( x=0, y=joint_y, w = joint_w,d=joint_d,h=height,t=thickness){
     }
 }
 
-module anchor_mount( x =receptacle_rad, y = height, plate_diameter = receptacle_base_d, holes_diameter = 2.5, t = thickness){
-    //z = anchor_base_d + joint_d+t;
+module anchor_mount( x =receptacle_rad, y = height, holes_diameter = 2.5, t = thickness){
+    //plate_diameter = holes_diameter + thickness * 2;
+    plate_diameter = anchor_base_w;
     z = anchor_base_d + anchor_y-t/2;
     hole_pts = [
                 [-x, y/2, -z ],
