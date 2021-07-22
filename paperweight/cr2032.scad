@@ -12,12 +12,8 @@ Module: CR2032 Battery Holder/Switch
 Parameters
 */
 // Finish
-$fn = 90;
+$fn = 120;
 
-// Pedestal Radius
-ped_r = 5; // [0:1:100]
-// Pedestal Height
-ped_h = 1; // [0:1:100]
 // Thickness
 thickness = 1.0; // [0:1:100]
 // Terminal Wire Radius
@@ -25,48 +21,91 @@ term_r   = 0.5;    // [0:0.1:100]
 
 ///< Parameters after this are hidden from the customizer
 module __Customizer_Limit__(){}
-holder_w = (ped_r*2)+thickness;
-holder_d = (ped_r*2)+thickness;
-holder_h = (ped_h+thickness*2);
-
-term_l   = (ped_r*2)+thickness*2;
+cr2032_h = 3.12; // [0:1:100]
+cr2032_r = 10.00;// [0:1:100]
 
 ///< Modules
-module cr2032( r = ped_r, h = ped_h, t = thickness ){
+module cr2032( r = cr2032_r, h = cr2032_h, t = thickness ){
     color("silver")
         cylinder( h=h, r=r, true );
 }
 
-module holder( w=holder_w, d=holder_d, h=holder_h, t = thickness ){
-    translate([0,0,t/2])
-    difference(){
-        cube( [ w, d, h ], true );
-        translate([0,0,h/2])
-            cube( [ w, d/3, h ], true );
-    }
-}
-
-module terminal( r = term_r, l = term_l ){
+module terminal( r = 1, l = 1 ){
     cylinder( h = l, r = r );
 }
 
+module terminal_pair(r = 1, l = 1){
+    union(){
+        terminal(r, l);
+        translate( [0,cr2032_r/2,0] )
+            terminal(r, l);
+    }
+}
+
+module hull_cr2032( t= thickness, h =thickness*2+cr2032_h ){
+    r = cr2032_r+t*2;
+    hull(){
+        linear_extrude( height = h ){
+            circle( r = r );
+            translate([0,r/4,0])
+                circle( r = r );
+        }
+    }
+}
+
+module shell(t = thickness, h = thickness+cr2032_h){
+    difference(){
+        hull_cr2032(t, h);
+        translate([0,0,thickness])
+            #hull_cr2032(0, h);
+        translate([cr2032_r/4,-cr2032_r/2, thickness ] )
+        rotate([0,-180,90] )
+        #terminal_pair(l=thickness);
+
+    }
+
+}
+
+
+module shell_inlay(){
+    r = cr2032_r;
+    linear_extrude( height = thickness ){
+        hull(){
+        circle( r = r/2 );
+        translate([-r/2-thickness,r/2,0])
+            circle( r = r/2 );
+        translate([r/2+thickness,r/2,0])
+            circle( r = r/2 );
+        }
+    }
+}
+
+module shell_rim(t = thickness, h = thickness){
+    color("pink")
+        difference(){
+            hull_cr2032(t, h);
+            translate([0,0,-0.01])
+                hull_cr2032(0, h+0.02);
+        }
+}
+
+module shell_top(){
+    difference(){
+        union(){
+            shell_rim();
+            #shell_inlay();
+        }
+        terminal_pair();
+    }
+}
 
 ///< Build object
 difference(){
-    difference(){
-        holder();
-        hull(){
-            cr2032();
-            translate([thickness+ped_r*1/2,0,0])
-                cr2032();
-        }
-    }
-    translate( [ -ped_r-thickness, 0, -thickness/2 ] )
-        rotate( [0,90,0] )
-    terminal();
-    translate( [ -ped_r+thickness/2, -ped_r+thickness, thickness/2 ] )
-            rotate( [ -90, 0, 0 ] )
-        terminal();
-    
+    shell();
+    translate([0,-cr2032_r,thickness])
+        cr2032();
 }
 
+translate([0,0,thickness+cr2032_h ])
+shell_top();
+//translate([0,0,thickness])cr2032();
