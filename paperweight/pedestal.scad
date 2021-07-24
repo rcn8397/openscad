@@ -1,7 +1,7 @@
 ///< Object definition
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
-
+use <../lib/cantilever.scad>;
 
 /*
 Module: Name
@@ -16,31 +16,39 @@ Parameters
 $fn = 90;
 
 // Pedestal Radius
-ped_r = 25; // [0:1:100]
+ped_r       = 25;  // [0:1:100]
 // Pedestal Height
-ped_min_h = 0; // [0:1:100]
+ped_min_h   = 0;   // [0:1:100]
 // Thickness
-thickness = 1.0; // [0:0.1:20]
+thickness   = 1.0; // [0:0.1:20]
 // Leads radiu
-leads_r   = 0.5; // [0:0.1:5]
+leads_r     = 2.0; // [0:0.1:5]
+// Print Retainer
+print_led_retainer = true;
+// Print Pedestal
+print_pedestal = true;
 
 ///< Parameters after this are hidden from the customizer
 module __Customizer_Limit__(){}
-cr2032_h    = 3.12; // [0:1:100]
-cr2032_r    = 10.00;// [0:1:100]
-cr2032_d    = cr2032_r * 2;
-led_lamp_h  = 2.0;  // [0:0.1:10]
-led_lamp_d  = 3.00; // [0:0.1:4 ]
-led_rim_d   = 3.25; // [0:0.1:4 ]
-led_rim_h   = 1.0;  // [0:0.1:4 ]
-led_h       = led_lamp_h + led_rim_h + led_lamp_d/2;
-ped_h       = ped_min_h + cr2032_r*2+thickness;
-spdt_body_w = 6.75; // [0:0.1:15]
-spdt_body_d = 6.5;  // [0:0.1:15]
-spdt_body_h = 12.75;// [0:0.1:15]
-spdt_sw_w   = 5.3;  // [0:0.1:15]
-spdt_sw_d   = 3.88; // [0:0.1:15]
-spdt_sw_h   = 3.89; // [0:0.1:15]
+cr2032_h        = 3.12; // [0:1:100]
+cr2032_r        = 10.00;// [0:1:100]
+cr2032_d        = cr2032_r * 2;
+led_lamp_h      = 2.0;  // [0:0.1:10]
+led_lamp_d      = 4.0;  // [0:0.1:4 ]
+led_rim_d       = 4.25; // [0:0.1:4 ]
+led_rim_h       = 1.0;  // [0:0.1:4 ]
+led_h           = led_lamp_h + led_rim_h + led_lamp_d/2;
+ped_h           = ped_min_h + cr2032_r*2+thickness;
+spdt_retainer_w = 7  + thickness;
+spdt_retainer_h = 13.5 + thickness;
+spdt_body_w = 7.5; // [0:0.1:15]
+spdt_body_d = 7.0; // [0:0.1:15]
+spdt_body_h = 13.5;// [0:0.1:15]
+spdt_sw_w   = 6.0; // [0:0.1:15]
+spdt_sw_d   = 4.0; // [0:0.1:15]
+spdt_sw_h   = 4.0; // [0:0.1:15]
+
+
 
 ///< Modules
 
@@ -55,44 +63,91 @@ module led(){
     cylinder( h = led_rim_h, r = led_rim_d/2.0 );
 }
 
+module led_retainer(){
+    module led_lead_hole(){
+        translate([-thickness,thickness,0])
+            cube([thickness*2,thickness*2, thickness]);
+    }
+
+    difference(){
+        color("orange")
+            cylinder( h=led_h, r = thickness*2+led_rim_d/2.0+0.5 );
+        translate( [0,0,thickness] )
+            color("pink")
+            cylinder( h=led_h, r = thickness+led_rim_d/2.0+0.15 );
+        led_lead_hole();
+        mirror([0,1,0])
+            led_lead_hole();
+    }
+}
+
+
 module terminal_pair(){
-    cylinder( h = thickness*2+cr2032_h, r = leads_r );
-    translate( [cr2032_r/2,0,0] )
+    translate( [-cr2032_r*1/4,0,0] )
         cylinder( h = thickness*2+cr2032_h, r = leads_r );
+    translate( [cr2032_r*3/4,0,0] )
+        cylinder( h = thickness*2+cr2032_h, r = leads_r );
+}
+
+module cr2032_clip(){
+       translate([0,-cr2032_r-thickness,0])
+           cantilever(y = 0.8,
+                      h = 0.8,
+                      b = 0.8,
+                      p = 0.4,
+                      a = 0.4,
+                      l = cr2032_d
+                      );       
 }
 
 module cr2032_half( center = true ){
        difference(){
-        linear_extrude( height = cr2032_d ){
-            square( [ thickness, cr2032_d ], center );
-            translate([-thickness, thickness, 0 ] )
-                square( [thickness*2, thickness ], center );
-            translate([-thickness, -thickness, 0 ] )
-                square( [thickness*2, thickness ], center );
-        }
-        translate([-cr2032_h-thickness,-cr2032_r/4,cr2032_d*2/3])
-        rotate([90,0,90])
-            terminal_pair();
-    }
+           linear_extrude( height = cr2032_d ){
+               square( [ thickness, cr2032_d+thickness*2 ], center );
+               translate([-thickness, thickness, 0 ] )
+                   square( [thickness*2, thickness ], center );
+               translate([-thickness, -thickness, 0 ] )
+                   square( [thickness*2, thickness ], center );
+           }
+           translate([-cr2032_h-thickness,-cr2032_r/4,cr2032_d*2/3])
+               rotate([90,0,90])
+               terminal_pair();
+       }
+       cr2032_clip();
+       mirror([0,1,0])
+           cr2032_clip();
 }
 
 module cr2032_holder( center = true){
     cr2032_half(center);
-    translate([cr2032_h-0.1,0,0])
+    translate([cr2032_h+thickness,0,0])
     mirror([1,0,0])
         cr2032_half(center);
 }
 
 module spdt_switch(){
+    tol = 0.2;
     color("silver")
-        cube( [spdt_body_w, spdt_body_d+thickness+5, spdt_body_h] );
+        cube( [spdt_body_w, spdt_body_d+thickness+0.25, spdt_body_h] );
     translate([1.3,-spdt_sw_w,3.29])
         color("black")
-        cube( [spdt_sw_d,spdt_sw_w, spdt_sw_h ]);
+        cube( [spdt_sw_d+tol,spdt_sw_w+tol, spdt_sw_h+tol ]);
     translate([1.3,-spdt_sw_w,6.6])
         color("cyan")
-        cube( [spdt_sw_d,spdt_sw_w, spdt_sw_h ]);
+        cube( [spdt_sw_d+tol,spdt_sw_w+tol, spdt_sw_h+tol ]);
 
+}
+
+module retainer_clip(){
+    translate([ -ped_r+thickness*2,
+                -thickness-spdt_body_h/2,
+                ped_h*2/3-thickness/2 ] )
+        cantilever(y = 0.55,
+                   h = thickness-0.25,
+                   b = spdt_retainer_w+0.15,
+                   p = 1,
+                   a = 1,
+                   l = thickness);                  
 }
 
 module pedestal( r = ped_r, h = ped_h, t = thickness ){
@@ -107,28 +162,45 @@ module pedestal( r = ped_r, h = ped_h, t = thickness ){
                             color("red")
                             cylinder( h=h, r=r-t);
                     }
-                    cylinder( h=led_h-thickness, r = t+led_rim_d/2.0 );
+                    color("pink")
+                        cylinder( h=led_h, r = t+led_rim_d/2.0 );
                 }
-                translate([0,0,led_h-thickness])
+                translate([0,0,led_h])
                     rotate([180,0,0])
-                    led();
+                    #led();
+                    #cylinder( h=10, r=(led_rim_d/2)-1 );
+                    
             }
             translate([ped_r/3,0, thickness-0.1])
                 cr2032_holder();
-            translate([-ped_r+thickness,
-                   -thickness/2-spdt_body_h/2,
-                   ped_h/2])
-            cube( [spdt_body_w+thickness,
-                   spdt_body_h+thickness,
-                   spdt_body_d+thickness ] );
+            union(){
+            translate([-ped_r+thickness+0.5,
+                       -thickness/2-spdt_body_h/2,
+                       thickness] )
+                cube( [spdt_retainer_w,
+                       spdt_retainer_h,
+                       ped_h-thickness ]);
+            retainer_clip();
+            mirror([0,1,0])
+                retainer_clip();
+            }
         }
-        translate([-ped_r+thickness,-spdt_body_h/2, ped_h/2+thickness/2])
+        translate([-ped_r+thickness+0.5,-spdt_body_h/2, ped_h/2+thickness/2])
             rotate([0,-90,-90])
-            spdt_switch();
-    }
+            #spdt_switch();
+    }   
 
 }
 
 ///< Build object
-pedestal();
+if( print_pedestal ){
+    pedestal();
+ }
+if( print_led_retainer ){
+    translate([ped_r+10,0,0] )
+        led_retainer();
+ }
+
+
+
 
