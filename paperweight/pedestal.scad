@@ -1,12 +1,10 @@
 ///< Object definition
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
-//use <../lib/cantilever.scad>;
 
 /*
-Module: Name
-   Preamble and description
-
+Module: Paperweight Pedestal
+ Simple pedestal with led, powered by a CR2032 battery and controlled by a spdt switch
 */
 
 /*
@@ -140,23 +138,6 @@ module spdt_switch(){
 
 }
 
-//module retainer_clip(){
-//    translate([ -ped_r+thickness*2,
-//                -thickness*1.35-spdt_body_h/2,
-//                ped_h*2/3-thickness/2 ] ){
-//        rotate([ 0,0,0])
-//        cantilever(y = thickness*3/4,
-//                   h = thickness-0.25,
-//                   b = spdt_retainer_w+0.15,
-//                   p = 1,
-//                   a = 2,
-//                   l = thickness);
-//        color( "green" )
-//            translate([0,0,-thickness])
-//            cube([spdt_body_h/2, spdt_body_d, thickness] );
-//    }
-//}
-
 module batt_holder( batt_h = cr2032_h , batt_d = cr2032_d, t = thickness ){
     batt_r = batt_d/2;
     difference(){
@@ -232,9 +213,6 @@ module pedestal( r = ped_r, h = ped_h, t = thickness ){
                 cube( [spdt_retainer_w,
                        spdt_retainer_h,
                        ped_h-thickness ]);
-//            retainer_clip();
-//            mirror([0,1,0])
-//                retainer_clip();
             }
         }
         translate([-ped_r+thickness+0.5,-spdt_body_h/2, ped_h/2+thickness/2])
