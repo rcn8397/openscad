@@ -120,7 +120,7 @@ module cr2032_half( center = true ){
 
 module cr2032_holder( center = true){
     cr2032_half(center);
-    translate([cr2032_h+thickness,0,0])
+    translate([cr2032_h+thickness*2,0,0])
     mirror([1,0,0])
         cr2032_half(center);
 }
@@ -137,6 +137,22 @@ module spdt_switch(){
         cube( [spdt_sw_d+tol,spdt_sw_w+tol, spdt_sw_h+tol ]);
 
 }
+
+module spdt_shelf(){
+    x = spdt_retainer_w-thickness;
+    y = ped_h/2;
+    pts = [
+           [0,0],
+           [0,y],
+           [x,y]
+           ];
+    translate([-spdt_retainer_w/2, spdt_retainer_h/2, 0 ] )
+    rotate([90,0,0])
+        linear_extrude( height = spdt_retainer_h ){
+        polygon( points = pts );
+    }
+}
+
 
 module batt_holder( batt_h = cr2032_h , batt_d = cr2032_d, t = thickness ){
     batt_r = batt_d/2;
@@ -184,7 +200,6 @@ module batt_holder( batt_h = cr2032_h , batt_d = cr2032_d, t = thickness ){
 
 module pedestal( r = ped_r, h = ped_h, t = thickness ){
     difference(){
-        //union(){
         union(){
             difference(){
                 union(){
@@ -206,20 +221,20 @@ module pedestal( r = ped_r, h = ped_h, t = thickness ){
             translate([ped_r/3,0, thickness-0.1])
                 cr2032_holder();
 
-            union(){
             translate([-ped_r+thickness+0.5,
                        -thickness/2-spdt_body_h/2,
-                       thickness] )
+                       ped_h/2-thickness/2 ] )//thickness] )
+                color("lime")
                 cube( [spdt_retainer_w,
                        spdt_retainer_h,
-                       ped_h-thickness ]);
-            }
+                       spdt_retainer_w+thickness ]);
+            translate([-ped_r+spdt_retainer_w-thickness*2,0,0])
+                spdt_shelf();
         }
         translate([-ped_r+thickness+0.5,-spdt_body_h/2, ped_h/2+thickness/2])
             rotate([0,-90,-90])
             #spdt_switch();
     }
-
 }
 
 ///< Build object
@@ -230,3 +245,6 @@ if( print_led_retainer ){
     translate([ped_r+10,0,0] )
         led_retainer();
  }
+
+
+    
