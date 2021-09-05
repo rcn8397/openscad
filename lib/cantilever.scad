@@ -33,6 +33,47 @@ module cantilever( y, h, b, p, a, l = 1, origin = 0, hide = false ){
      }
 }
 
+module cantilever_w_fillet( y, h, b, p, a, l = 1, origin = 0, fw, fh, fr=1, hide = false ){
+
+    difference(){
+        //union(){
+        union(){
+            points = [
+                      [ origin,             origin],
+                      [ origin,             h     ],
+                      [ origin + b,         h     ],
+                      [ origin + b,         h + y ],
+                      [ origin + b + p,     h + y ],
+                      [ origin + b + p + a, h     ],
+                      [ origin + b + p + a, origin],
+                      ];
+            if( !hide ){
+                linear_extrude( height = l ){
+                    polygon( points );
+                    translate([ origin, h, 0] )
+                        square( [ fw, fh ] );
+                    translate([ origin, -h, 0] )
+                        square( [ fw, fh ] );
+                }
+            }
+        }
+        translate([ origin + fw, origin + h + fr, 0] )
+            linear_extrude( height = l ){
+            circle( r = fr, $fn=60 );
+            translate( [ -fw, 0, 0] )
+                square([fw,fh]);
+        }
+        translate([ origin + fw, origin-fr, 0] )
+            linear_extrude( height = l ){
+            circle( r = fr, $fn=60 );
+            translate( [ -fw, -fh, 0] )
+                square([fw,fh]);
+
+        }
+    }
+}
+
+
 module substrate( y, h, b, p, a, l = 1, origin = [0,0], hide = false, sep = 0.25, suby = 1, subx = 0 ){
 
      points = [
@@ -71,11 +112,14 @@ module snap_fit_anchor( y, h, b, p, a, l = 1, origin = [0,0], hide = false, sep 
 }
 
 
-translate( [ 0, 8, 0 ] )cantilever(y = 1, h = 1-0.1, b = 6, p = 2, a = 2 );
+//translate( [ 0, 8, 0 ] )cantilever(y = 1, h = 1-0.1, b = 6, p = 2, a = 2 );
 
-snap_fit_sub( y = 1, h = 1-0.1, b = 6, p = 2, a = 2, sep = 0.1, suby = 0.1, subx = 0 );
+translate( [ 0, 18, 0 ] )cantilever_w_fillet(y = 1, h = 2, b = 6, p = 2, a = 2, fw = 2, fh = 40 );
 
-translate( [ 0, 3, 0 ] )snap_fit_sub( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = 3, sep = 0.1, suby = 1, subx = 0.25 );
+//snap_fit_sub( y = 1, h = 1-0.1, b = 6, p = 2, a = 2, sep = 0.1, suby = 0.1, subx = 0 );
+
+//translate( [ 0, 3, 0 ] )snap_fit_sub( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = 3, sep = 0.1, suby = 1, subx = 0.25 );
 
 
-translate( [ 0, 5, 0 ] )snap_fit_anchor( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = 3, sep = 0.1, suby = 1, subx = 0.25 );
+//translate( [ 0, 5, 0 ] )snap_fit_anchor( y = 0.5, h = 0.5-0.1, b = 3, p = 0.5, a = 1, l = 3, sep = 0.1, suby = 1, subx = 0.25 );
+
