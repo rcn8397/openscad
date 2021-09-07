@@ -26,6 +26,8 @@ print_led_retainer = true;
 print_pedestal = true;
 // Print Battery Holder
 print_battery_holder = false;
+// Print spdt top
+print_spdt_top = true;
 // Angled  Battery Holder
 angled_battery = true;//false;
 
@@ -45,9 +47,9 @@ led_h           = led_lamp_h + led_rim_h + led_lamp_d/2;
 spdt_body_w     = 7.5; // [0:0.1:15]
 spdt_body_d     = 6.5; // [0:0.1:15]
 spdt_body_h     = 13.5;// [0:0.1:15]
-spdt_lead_w     = 1.3; // [0:0.1:15]
-spdt_lead_d     = 7.0; // [0:0.1:15]
-spdt_lead_h     = 1.0; // [0:0.1:15]
+spdt_lead_w     = 1.3+0.50; // [0:0.1:15]
+spdt_lead_d     = 7.0+0.50; // [0:0.1:15]
+spdt_lead_h     = 1.0+0.50; // [0:0.1:15]
 spdt_sw_w       = 6.0; // [0:0.1:15]
 spdt_sw_d       = 4.0; // [0:0.1:15]
 spdt_sw_h       = 4.0; // [0:0.1:15]
@@ -99,9 +101,11 @@ module spdt_switch(){
     translate([1.3,-spdt_sw_w,6.6])
         color("cyan")
         cube( [spdt_sw_d+tol,spdt_sw_w+tol, spdt_sw_h+tol ]);
+
+    /// Terminals
     translate([spdt_body_w/2,
                spdt_body_d+thickness+0.25+spdt_lead_d/2,
-               1.5])
+               2])
         color("gold")
         cube( [ spdt_lead_w, spdt_lead_d, spdt_lead_h ], true );
     translate([spdt_body_w/2,
@@ -111,7 +115,7 @@ module spdt_switch(){
         cube( [ spdt_lead_w, spdt_lead_d, spdt_lead_h ], true );
     translate([spdt_body_w/2,
                spdt_body_d+thickness+0.25+spdt_lead_d/2,
-               spdt_body_h-1.5])
+               spdt_body_h-2])
         color("gold")
         cube( [ spdt_lead_w, spdt_lead_d, spdt_lead_h ], true );
 
@@ -146,7 +150,7 @@ module batt_holder( batt_h = cr2032_h , batt_d = cr2032_d+0.5, t = thickness ){
         translate([cr2032_r,-cr2032_r/2,t])
             rotate([0,-90,0])
             #cylinder( h = cr2032_d, d = leads_r );
-            
+
         //< Positive Terminals
         for( i = [-1,1] )
             translate( [ i*2.5, batt_r-t, t+batt_h] )
@@ -198,71 +202,26 @@ module pedestal( r = ped_r, h = ped_h, t = thickness ){
                         rotate([180,0,0])
                         #led();
                         #cylinder( h=10, r=(led_rim_d/2)-1 );
-    
+
                 }
                 // Switch Retainer
+                //translate([-ped_r+thickness+0.5, -thickness/2-spdt_body_h/2, thickness ] )
                 translate([-ped_r+thickness+0.5,
-                           -thickness/2-spdt_body_h/2,
-                           thickness ] )
+                           (thickness*2+spdt_body_h)/2,
+                           ped_h/2-thickness*2])
                     color("lime")
-                    cube( [spdt_retainer_w, spdt_retainer_h, ped_h/2+thickness ]);
-                translate([ -spdt_body_d-thickness*2,
-                            -thickness-spdt_body_h/2,
-                            /*ped_h/2+*/thickness])
-                rotate([0,-90,0]){
-                    cantilever(y = thickness*3/4,
-                               h = thickness,
-                               b = ped_h/2+spdt_body_d-thickness,
-                               p = 1,
-                               a = 2,
-                               l = spdt_body_d);
-                    translate([0,spdt_body_h+thickness*2,0])
-                        mirror([0,1,0])
-                        cantilever(y = thickness*3/4,
-                                   h = thickness,
-                                   b = ped_h/2+spdt_body_d-thickness,
-                                   p = 1,
-                                   a = 2,
-                                   l = spdt_body_d);
-                }                
-    
+                    rotate([0,0,-90])
+                    spdt_bottom_retainer();
+
             }
             // Switch
-            translate([-ped_r+thickness+0.5,-spdt_body_h/2, ped_h/2 ])//thickness*2])
+            translate([-ped_r+thickness*2+0.5,
+                       -spdt_body_h/2-thickness/2,
+                       ped_h/2 ])
                 rotate([0,-90,-90])
                 #spdt_switch();
         }
-        ///Lower SPDT clamps
-        
-                translate([-spdt_retainer_w-thickness+2,
-                           -1,
-                           thickness])
-                rotate([90,-90,0])
-                color("silver")
-                    cantilever_w_fillet(y  = thickness+1,
-                                        h  = thickness+0.40,
-                                        b  = ped_h/2+(spdt_body_d/2)-2*thickness-1.5,
-                                        p  = 2,
-                                        a  = 2,
-                                        l  = spdt_body_d/2,
-                                        fw = 1,
-                                        fh = 3,
-                                        fr = 1);
-                translate([-spdt_retainer_w-thickness+2,
-                           1+spdt_body_d/2,
-                           thickness])
-                rotate([90,-90,0])
-                color("silver")
-                    cantilever_w_fillet(y  = thickness+1,
-                                        h  = thickness+0.40,
-                                        b  = ped_h/2+(spdt_body_d/2)-2*thickness-1.5,
-                                        p  = 2,
-                                        a  = 2,
-                                        l  = spdt_body_d/2,
-                                        fw = 1,
-                                        fh = 3,
-                                        fr = 1);
-                
+
         // Battery Holder
         if( angled_battery ){
         translate([1 + led_retainer_r+thickness*2,0, thickness-0.15])
@@ -275,6 +234,81 @@ module pedestal( r = ped_r, h = ped_h, t = thickness ){
     }
 }
 
+module spdt_bottom_retainer(){
+    difference(){
+        color("red")
+            linear_extrude( height = spdt_body_w/2 + thickness )
+            square([ thickness*2 + spdt_body_h,
+                     thickness*2 + spdt_body_w ]);
+        translate([thickness,thickness,spdt_body_w+thickness])
+            rotate([0,90,0])
+            #spdt_switch();
+    }
+
+    /// Lower Peg
+    connector_r = thickness + 1;
+    points = [ [ 0,
+                 spdt_body_w+connector_r+thickness,
+                 0 ],
+               [ spdt_body_h+2*thickness,
+                 spdt_body_w+connector_r + thickness,
+                 0 ],
+               ];
+
+    for( p = points ){
+        translate( p )
+            cylinder( h = thickness + spdt_body_w/2,
+                      r = connector_r );
+    }
+    for( p = points ){
+        translate( p )
+            translate([0,0,1])
+            cylinder( h = thickness + spdt_body_w/2,
+                      r = connector_r-1-0.15 );
+    }
+
+
+}
+
+module spdt_top_retainer(){
+    connector_r = thickness + 1;
+    points = [ [ 0,
+                 spdt_body_w+connector_r+thickness,
+                 spdt_body_w/2+thickness ],
+               [ spdt_body_h+2*thickness,
+                 spdt_body_w+connector_r + thickness,
+                 spdt_body_w/2+thickness ],
+               ];
+
+    difference(){
+        union(){
+            difference(){
+                color("lime")
+                    translate([0,0,spdt_body_w/2 + thickness])
+                    linear_extrude( height = spdt_body_w/2 + thickness )
+                    square([ thickness*2 + spdt_body_h,
+                             thickness*2 + spdt_body_w ]);
+                translate([thickness,thickness,spdt_body_w+thickness])
+                    rotate([0,90,0])
+                    spdt_switch();
+            }
+            /// Upper Peg           
+                for( p = points ){
+                    translate( p )
+                        cylinder( h = thickness + spdt_body_w/2,
+                                  r = connector_r );
+                }
+        }
+        for( p = points ){
+            translate( p )
+                translate([0,0,-1])
+                #cylinder( h = thickness + spdt_body_w/2,
+                          r = connector_r-1+0.15 );
+        }
+    }
+}
+
+
 ///< Build object
 if( !print_battery_holder ){
     if( print_pedestal ){
@@ -284,11 +318,12 @@ if( !print_battery_holder ){
         translate([ped_r+10,0,0] )
             led_retainer();
     }
+    if( print_spdt_top ){
+        translate([50, 0, 2*(spdt_body_w/2 + thickness)])
+            rotate([180,0,0])
+            spdt_top_retainer();
+    }
  }
  else{
      angled_batt_holder();
-     //spdt_switch();
  }
-
-
-    
