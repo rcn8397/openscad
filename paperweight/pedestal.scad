@@ -28,6 +28,9 @@ print_pedestal = true;
 print_battery_holder = false;
 // Print spdt top
 print_spdt_top = true;
+// Print spdt bottom
+print_spdt_bottom = true;
+
 // Angled  Battery Holder
 angled_battery = true;//false;
 
@@ -44,9 +47,9 @@ led_rim_h       = 1.0;  // [0:0.1:4 ]
 led_retainer_r  = thickness*2+led_rim_d/2.0+0.5;
 led_h           = led_lamp_h + led_rim_h + led_lamp_d/2;
 
-spdt_body_w     = 7.5; // [0:0.1:15]
-spdt_body_d     = 6.5; // [0:0.1:15]
-spdt_body_h     = 13.5;// [0:0.1:15]
+spdt_body_w     = 7.40; // [0:0.1:15]
+spdt_body_d     = 5.75;  // [0:0.1:15]
+spdt_body_h     = 13.25;// [0:0.1:15]
 spdt_lead_w     = 1.3+0.50; // [0:0.1:15]
 spdt_lead_d     = 7.0+0.50; // [0:0.1:15]
 spdt_lead_h     = 1.0+0.50; // [0:0.1:15]
@@ -92,9 +95,9 @@ module led_retainer(){
 }
 
 module spdt_switch(){
-    tol = 0.2;
+    tol = 0.0;
     color("silver")
-        cube( [spdt_body_w, spdt_body_d+thickness+0.25, spdt_body_h] );
+        cube( [spdt_body_w, spdt_body_d+thickness, spdt_body_h] );
     translate([1.3,-spdt_sw_w,3.29])
         color("black")
         cube( [spdt_sw_d+tol,spdt_sw_w+tol, spdt_sw_h+tol ]);
@@ -104,17 +107,17 @@ module spdt_switch(){
 
     /// Terminals
     translate([spdt_body_w/2,
-               spdt_body_d+thickness+0.25+spdt_lead_d/2,
+               spdt_body_d+thickness+spdt_lead_d/2,
                2])
         color("gold")
         cube( [ spdt_lead_w, spdt_lead_d, spdt_lead_h ], true );
     translate([spdt_body_w/2,
-               spdt_body_d+thickness+0.25+spdt_lead_d/2,
+               spdt_body_d+thickness+spdt_lead_d/2,
                spdt_body_h/2])
         color("gold")
         cube( [ spdt_lead_w, spdt_lead_d, spdt_lead_h ], true );
     translate([spdt_body_w/2,
-               spdt_body_d+thickness+0.25+spdt_lead_d/2,
+               spdt_body_d+thickness+spdt_lead_d/2,
                spdt_body_h-2])
         color("gold")
         cube( [ spdt_lead_w, spdt_lead_d, spdt_lead_h ], true );
@@ -204,23 +207,21 @@ module pedestal( r = ped_r, h = ped_h, t = thickness ){
                         #cylinder( h=10, r=(led_rim_d/2)-1 );
 
                 }
-                // Switch Retainer
-                //translate([-ped_r+thickness+0.5, -thickness/2-spdt_body_h/2, thickness ] )
-                translate([-ped_r+thickness+0.5,
-                           (thickness*2+spdt_body_h)/2,
-                           ped_h/2-thickness*2])
-                    color("lime")
-                    rotate([0,0,-90])
-                    spdt_bottom_retainer();
-
             }
-            // Switch
-            translate([-ped_r+thickness*2+0.5,
+            // Switch cutout
+            translate([-ped_r+thickness*2+1.55,
                        -spdt_body_h/2-thickness/2,
-                       ped_h/2 ])
+                       spdt_body_w/2-thickness/2])
                 rotate([0,-90,-90])
                 #spdt_switch();
         }
+        // Switch Retainer
+        translate([-ped_r+thickness+1.75,
+                   (thickness*2+spdt_body_h)/2,
+                   thickness ] )
+            color("lime")
+            rotate([0,0,-90])
+            spdt_bottom_retainer();
 
         // Battery Holder
         if( angled_battery ){
@@ -310,20 +311,28 @@ module spdt_top_retainer(){
 
 
 ///< Build object
-if( !print_battery_holder ){
-    if( print_pedestal ){
+if( print_pedestal ){
         pedestal();
-    }
-    if( print_led_retainer ){
-        translate([ped_r+10,0,0] )
-            led_retainer();
-    }
-    if( print_spdt_top ){
-        translate([50, 0, 2*(spdt_body_w/2 + thickness)])
-            rotate([180,0,0])
-            spdt_top_retainer();
-    }
  }
- else{
+
+if( print_led_retainer ){
+    translate([ped_r+10,0,0] )
+        led_retainer();
+ }
+
+if(print_battery_holder){
+    translate([0, 40, 0] )
      angled_batt_holder();
+ }
+
+
+if( print_spdt_top ){
+    translate([40, 0, 2*(spdt_body_w/2 + thickness)])
+        rotate([180,0,0])
+        spdt_top_retainer();
+ }
+ 
+if( print_spdt_bottom ){
+    translate([65, 0, 0] )
+    spdt_bottom_retainer();
  }
