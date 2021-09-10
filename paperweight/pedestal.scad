@@ -29,8 +29,7 @@ print_battery_holder = false;
 // Print spdt top
 print_spdt_top = true;
 // Print spdt bottom
-print_spdt_bottom = true;
-
+print_spdt_bottom = false;
 // Angled  Battery Holder
 angled_battery = true;//false;
 
@@ -58,6 +57,7 @@ spdt_sw_d       = 4.0; // [0:0.1:15]
 spdt_sw_h       = 4.0; // [0:0.1:15]
 spdt_retainer_w = spdt_body_d  + thickness;
 spdt_retainer_h = spdt_body_h + thickness;
+connector_r     = thickness + 1;
 
 ped_h           = ped_min_h + cr2032_r*3/4 + thickness*2;
 
@@ -187,6 +187,9 @@ module angled_batt_holder(){
 }
 
 module pedestal( r = ped_r, h = ped_h, t = thickness ){
+    spdt_retainer_points = [-ped_r+thickness+connector_r*1.25,
+                            (connector_r*2 + thickness*2+spdt_body_h)/2,
+                            thickness ];
     union(){
         difference(){
             union(){
@@ -195,7 +198,7 @@ module pedestal( r = ped_r, h = ped_h, t = thickness ){
                         difference(){
                             cylinder( h=h, r=r );
                             translate([0,0,thickness])
-                                color("red")
+                                color("cyan")
                                 cylinder( h=h, r=r-t);
                         }
                         color("pink")
@@ -209,17 +212,13 @@ module pedestal( r = ped_r, h = ped_h, t = thickness ){
                 }
             }
             // Switch cutout
-            translate([-ped_r+thickness*2+1.55,
-                       -spdt_body_h/2-thickness/2,
-                       spdt_body_w/2-thickness/2])
-                rotate([0,-90,-90])
-                #spdt_switch();
+        translate( spdt_retainer_points )
+            rotate([0,0,-90])
+            spdt_bottom_retainer(true);
         }
         // Switch Retainer
-        translate([-ped_r+thickness+1.75,
-                   (thickness*2+spdt_body_h)/2,
-                   thickness ] )
-            color("lime")
+        translate( spdt_retainer_points )
+            color("green")
             rotate([0,0,-90])
             spdt_bottom_retainer();
 
@@ -235,26 +234,48 @@ module pedestal( r = ped_r, h = ped_h, t = thickness ){
     }
 }
 
-module spdt_bottom_retainer(){
-    difference(){
+module spdt_bottom_retainer(diffable = false){
+    module substrate(){
         color("red")
             linear_extrude( height = spdt_body_w/2 + thickness )
-            square([ thickness*2 + spdt_body_h,
+            square([ thickness*2 + spdt_body_h + connector_r*2,
                      thickness*2 + spdt_body_w ]);
-        translate([thickness,thickness,spdt_body_w+thickness])
-            rotate([0,90,0])
-            #spdt_switch();
     }
-
+    module spdt(){
+        translate([thickness+connector_r,
+                   thickness,
+                   spdt_body_w+thickness])
+            rotate([0,90,0])
+            spdt_switch();
+    }
+    
+    if( diffable ){
+        union(){
+            substrate();
+            spdt();
+        }
+    }
+    else{
+        difference(){
+            substrate();
+            spdt();
+        }
+    }
     /// Lower Peg
-    connector_r = thickness + 1;
-    points = [ [ 0,
-                 spdt_body_w+connector_r+thickness,
-                 0 ],
-               [ spdt_body_h+2*thickness,
-                 spdt_body_w+connector_r + thickness,
-                 0 ],
-               ];
+    points = [
+              [ connector_r/2,
+                spdt_body_w+connector_r/2+thickness,
+                0 ],
+              [ connector_r/2,
+                connector_r,
+                0 ],
+              [ spdt_body_h+2*thickness+connector_r*1.5,
+                spdt_body_w+connector_r/2 + thickness,
+                0 ],
+              [ spdt_body_h+2*thickness+connector_r*1.5,
+                connector_r,
+                0 ],
+              ];
 
     for( p = points ){
         translate( p )
@@ -267,17 +288,20 @@ module spdt_bottom_retainer(){
             cylinder( h = thickness + spdt_body_w/2,
                       r = connector_r-1-0.15 );
     }
-
-
 }
 
 module spdt_top_retainer(){
-    connector_r = thickness + 1;
-    points = [ [ 0,
-                 spdt_body_w+connector_r+thickness,
+    points = [ [ connector_r/2,
+                 spdt_body_w+connector_r/2+thickness,
                  spdt_body_w/2+thickness ],
-               [ spdt_body_h+2*thickness,
-                 spdt_body_w+connector_r + thickness,
+               [ connector_r/2,
+                 connector_r,
+                 spdt_body_w/2+thickness ],
+               [ spdt_body_h+2*thickness+connector_r*1.5,
+                 spdt_body_w+connector_r/2 + thickness,
+                 spdt_body_w/2+thickness ],
+               [ spdt_body_h+2*thickness+connector_r*1.5,
+                 connector_r,
                  spdt_body_w/2+thickness ],
                ];
 
@@ -287,9 +311,9 @@ module spdt_top_retainer(){
                 color("lime")
                     translate([0,0,spdt_body_w/2 + thickness])
                     linear_extrude( height = spdt_body_w/2 + thickness )
-                    square([ thickness*2 + spdt_body_h,
+                    square([ thickness*2 + spdt_body_h+connector_r*2,
                              thickness*2 + spdt_body_w ]);
-                translate([thickness,thickness,spdt_body_w+thickness])
+                translate([thickness+connector_r,thickness,spdt_body_w+thickness])
                     rotate([0,90,0])
                     spdt_switch();
             }
