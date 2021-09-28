@@ -11,18 +11,19 @@ Module: Neo Queen Serenity Wand Adapter
 Parameters
 */
 
-// X Position
-x = 1; // [0:1:100]
-// Y Position
-y = 1; // [0:1:100]
-// Z Position
-z = 1; // [0:1:100]
-// Width
-w = 1; // [0:1:100]
-// Depth
-d = 1; // [0:1:100]
-// Height
-h = 1; // [0:1:100]
+// Finish
+$fn=90;
+
+// Dome Radius
+dome_rad = 30; // [0:1:100]
+// Wand head radius
+head_r = 15;
+// Wand head length
+head_l = 20;
+// Wand handle radius
+handle_r = 20;
+// Wand handle length
+handle_l = 20;
 
 ///< Parameters after this are hidden from the customizer
 module __Customizer_Limit__(){}
@@ -91,6 +92,58 @@ module spdt_switch(){
 
 }
 
+module dome( rad ){
+    difference(){
+        sphere( r = rad );
+        translate([0,0,-rad/2])
+        cube([rad*2, rad*2, rad], center=true);
+        }
+}
+
+module dome_hollow( rad ){
+    difference(){
+        dome( rad );
+        translate([0,0,-0.0099])
+            dome( rad-thickness);
+    }
+}
+
+module spdt_switch_cut(){
+    translate([spdt_body_h/2,
+               -dome_rad+thickness*2,
+               -spdt_body_w/2])
+        rotate([0,-90,0])
+        spdt_switch();
+}
+module half_cylinder(l, r, x_offset){
+    translate([x_offset,0,0]){
+        rotate([0,90,0])
+            difference(){
+            cylinder( h = l, r = r, center=true );
+            translate( [ r/2, 0, 0] )
+                cube( [ r, r*2, l ], center=true );
+        }
+    }
+}
+
+module adapter( l, r, x_offset, hollow = true ){
+    if( hollow ){
+        difference(){
+            half_cylinder(l,r,x_offset );
+            half_cylinder(l,r-thickness, x_offset );
+        }
+    }
+    else{
+        half_cylinder(l,r,x_offset );
+    }
+}
+
 
 ///< Build object
-spdt_switch();
+
+difference(){
+    dome_hollow( dome_rad );
+    #spdt_switch_cut();
+}
+adapter( head_l,   head_r,    dome_rad+spdt_body_h/2,  true );
+adapter( handle_l, handle_r, -dome_rad-spdt_body_h/2, true );
