@@ -24,6 +24,10 @@ head_l = 20;
 handle_r = 20;
 // Wand handle length
 handle_l = 20;
+// Bolt Diameter
+bolt_d = 6;   // [0:0.01:20]
+// Thread Diameter
+thread_d = 3; // [0:0.01:20]
 
 ///< Parameters after this are hidden from the customizer
 module __Customizer_Limit__(){}
@@ -108,6 +112,49 @@ module dome_hollow( rad ){
     }
 }
 
+module coupling( height, rad, bolt_r,  cut=false ){
+    if( cut ){
+        translate([0,0,(height/2)-thickness])
+            cylinder( h = height+thickness*2, r = rad, center=true );        
+    }
+    else{
+        translate([0,0,height/2])
+            difference(){
+            cylinder( h = height, r = rad, center=true );
+            translate([0,0,thickness])
+                cylinder( h = height, r = rad-thickness, center=true );
+            cylinder( h = height + thickness*2, r = bolt_r, center = true );
+        }
+    }
+}
+
+module cr2032_retainer_half( rad, cut = false ){
+    z = cr2032_h/4+thickness/2;
+    translate( [0, rad-cr2032_r-(thickness), z ] )
+
+    if( cut ){
+        cube( [ cr2032_d + thickness*2, cr2032_d + thickness*2, cr2032_h/2+thickness ], center = true );
+    }
+    else {
+        difference(){
+            difference(){
+                difference(){
+                    cube( [ cr2032_d + thickness*2, cr2032_d + thickness*2, cr2032_h/2+thickness ], center = true );
+                    translate([ 0, thickness, -thickness ] )
+                        cube( [ cr2032_d, cr2032_d, cr2032_h/2 ], center = true );
+                }
+                for( i = [ -1, 1 ] ){
+                    translate([ i * ( cr2032_r * 2/5 ), 0, 0 ] )
+                        cylinder( h = cr2032_h/2+thickness*2, r = 1, center=true );
+                }
+                length = ( cr2032_r*2/5 )*2;
+                rotate([0,90,0])
+                    cylinder( h = length, r = 1, center = true );
+            }
+        }
+    }
+}
+
 module spdt_switch_cut(){
     translate([spdt_body_h/2,
                -dome_rad+thickness*2,
@@ -144,6 +191,11 @@ module adapter( l, r, x_offset, hollow = true ){
 difference(){
     dome_hollow( dome_rad );
     #spdt_switch_cut();
+    #coupling( dome_rad, bolt_d, thread_d,true );
+    #cr2032_retainer_half( dome_rad, true );
 }
 adapter( head_l,   head_r,    dome_rad+spdt_body_h/2,  true );
 adapter( handle_l, handle_r, -dome_rad-spdt_body_h/2, true );
+coupling( dome_rad, bolt_d, thread_d );
+cr2032_retainer_half(dome_rad);
+
