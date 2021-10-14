@@ -15,19 +15,21 @@ Parameters
 $fn=90;
 
 // Dome Radius
-dome_rad = 30; // [0:1:100]
+dome_rad = 35; // [0:1:100]
 // Wand head radius
-head_r = 15;
+head_r = 15.50;
 // Wand head length
 head_l = 20;
 // Wand handle radius
-handle_r = 20;
+handle_r = 22.25;
 // Wand handle length
-handle_l = 20;
+handle_l = 30;
 // Bolt Diameter
 bolt_d = 6;   // [0:0.01:20]
 // Thread Diameter
 thread_d = 3; // [0:0.01:20]
+// print cr2032 half
+print_cr2032_half = false;
 
 ///< Parameters after this are hidden from the customizer
 module __Customizer_Limit__(){}
@@ -107,8 +109,7 @@ module dome( rad ){
 module dome_hollow( rad ){
     difference(){
         dome( rad );
-        translate([0,0,-0.0099])
-            dome( rad-thickness);
+        dome( rad-thickness);
     }
 }
 
@@ -186,16 +187,28 @@ module adapter( l, r, x_offset, hollow = true ){
 }
 
 
-///< Build object
-
+module wand_coupler(){
 difference(){
     dome_hollow( dome_rad );
     #spdt_switch_cut();
     #coupling( dome_rad, bolt_d, thread_d,true );
     #cr2032_retainer_half( dome_rad, true );
+    #adapter( head_l,   head_r-thickness,    -thickness+dome_rad+spdt_body_h/2, false );
+    #adapter( handle_l, handle_r-thickness, -dome_rad-spdt_body_h/2, false );
 }
 adapter( head_l,   head_r,    dome_rad+spdt_body_h/2,  true );
 adapter( handle_l, handle_r, -dome_rad-spdt_body_h/2, true );
 coupling( dome_rad, bolt_d, thread_d );
-cr2032_retainer_half(dome_rad);
+}
+
+
+// Build the thing
+if( print_cr2032_half ){
+    translate([0, dome_rad+thickness*2, 0])
+        rotate([0,0,0] )
+        cr2032_retainer_half(dome_rad);
+ }
+ else{
+     wand_coupler();
+ }
 
