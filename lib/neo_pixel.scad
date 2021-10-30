@@ -58,9 +58,57 @@ module pixel_clip_v1(lead_d = 1, foot_t = 2){
     translate([-width/2,-pcb_d/2-foot_t/2,-zmag-led_h/2 ])
         color("red")cube([width, foot_t, led_h+lead_d/2+led_h+pcb_h]);
 }
+
+module neoclip( lead_d = 1, rot = 0, foot_h = 1, tol = 0.25 ){
+    post_dim = [led_h-0.1, pcb_d/2, pcb_d];
+    
+    module retainer_post(){
+        translate([pcb_h,pcb_d/2+tol,0])
+            cube( post_dim, center=true);   
+    }
+    module z_axis_pixel(){
+    rotate_about_pt( rot , 90, [0,0,0])
+        neo_pixel();
+    }
+    module front_post(){
+        retainer_post();
+        mirror([0,1,0])
+            retainer_post();
+    }
+    module back_post(){
+        //cube([ led_h-0.1, pcb_d+led_w+tol, pcb_d ],center=true);
+        cube([ led_h-0.1, pcb_d, pcb_d ],center=true);
+    }
+
+    module foot(){
+        x=pcb_h*2+lead_d+led_h-0.1;
+        y=pcb_d+led_w+tol;
+        color("pink")
+            translate([-lead_d/2,0,-foot_h/2])
+            cube([ x, y, foot_h ],center=true);
+    }
+
+    module three_posts(include_foot=true){
+            front_post();
+            translate([-pcb_h-lead_d,0,0])
+                back_post();
+            if( include_foot ){
+                translate([0,0,-pcb_d/2])
+                    foot();
+            }
+    }
+    
+    difference(){
+        rotate([0,0,rot]){
+            three_posts();
+        }
+        #z_axis_pixel();
+    }
+    
+}
 ///< Build object
 ///< Remove this when including
-difference(){
-    pixel_clip_v1();
-    #neo_pixel();
-}
+//neoclip();
+
+
+//neo_pixel();
