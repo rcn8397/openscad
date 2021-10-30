@@ -13,15 +13,17 @@ Parameters
 
 // Finish
 $fn=90;
-
+// Thickness
+thickness       = 1.5;  // Thickness
 // Dome Radius
-dome_rad = 22; // [0:1:100]
+dome_rad = 27; // [0:1:100]
 // Wand head radius
 head_r = 15.50/2;
 // Wand head length
 head_l = 10;
 // Wand handle radius
-handle_r = 22.25/2;
+handle_d = 22.25+thickness*2;
+handle_r = handle_d/2;
 // Wand handle length
 handle_l = 15;
 // Bolt Diameter
@@ -30,13 +32,15 @@ bolt_d = 6;   // [0:0.01:20]
 thread_d = 3; // [0:0.01:20]
 // print cr2032 half
 print_cr2032_half = false;
+// print half
+print_half = false;
 
 ///< Parameters after this are hidden from the customizer
 module __Customizer_Limit__(){}
-thickness       = 1.0;  // Thickness
+
 leads_r         = 1.25; // [0:0.01:5]
 cr2032_h        = 3.25; // [0:1:100]
-cr2032_r        = 10.00;// [0:1:100]
+cr2032_r        = 10.50;// [0:1:100]
 cr2032_d        = cr2032_r * 2;
 led_lamp_h      = 2.0;  // [0:0.1:10]
 led_lamp_d      = 4.0;  // [0:0.1:4 ]
@@ -131,7 +135,8 @@ module coupling( height, rad, bolt_r,  cut=false ){
 
 module cr2032_retainer_half( rad, cut = false ){
     z = cr2032_h/4+thickness/2;
-    translate( [0, rad-cr2032_r-(thickness), z ] )
+    y = cr2032_d*0.90;
+    translate( [0, rad-cr2032_r-(thickness)+0.5, z ] )
 
     if( cut ){
         cube( [ cr2032_d + thickness*2, cr2032_d + thickness*2, cr2032_h/2+thickness ], center = true );
@@ -140,10 +145,11 @@ module cr2032_retainer_half( rad, cut = false ){
         difference(){
             difference(){
                 difference(){
-                    cube( [ cr2032_d + thickness*2, cr2032_d + thickness*2, cr2032_h/2+thickness ], center = true );
+                    cube( [ cr2032_d + thickness*2, y + thickness*2, cr2032_h/2+thickness ], center = true );
                     translate([ 0, thickness, -thickness ] )
-                        cube( [ cr2032_d, cr2032_d, cr2032_h/2 ], center = true );
+                        cube( [ cr2032_d, y, cr2032_h+1.0 ], center = true );
                 }
+                ///< lead holes
                 for( i = [ -1, 1 ] ){
                     translate([ i * ( cr2032_r * 2/5 ), 0, 0 ] )
                         cylinder( h = cr2032_h/2+thickness*2, r = 1, center=true );
@@ -190,27 +196,34 @@ module adapter( l, r, x_offset, hollow = true ){
 
 
 module wand_coupler(){
-difference(){
-    dome_hollow( dome_rad );
-    #spdt_switch_cut();
-    #coupling( dome_rad, bolt_d, thread_d,true );
-    #cr2032_retainer_half( dome_rad, true );
-    #adapter( head_l,   head_r-thickness,    dome_rad+thickness*2, false );
-    #adapter( handle_l, handle_r-thickness, -dome_rad-thickness*2, false );
-}
-adapter( head_l,   head_r,    dome_rad+thickness*3,  true );
-adapter( handle_l, handle_r, -dome_rad-thickness*4, true );
-coupling( dome_rad, bolt_d, thread_d );
+    difference(){
+        dome_hollow( dome_rad );
+        #spdt_switch_cut();
+        #coupling( dome_rad, bolt_d, thread_d,true );
+        #cr2032_retainer_half( dome_rad, true );
+        #adapter( head_l,   head_r-thickness,    dome_rad+thickness*2, false );
+        #adapter( handle_l, handle_r-thickness, -dome_rad-thickness*2, false );
+    }
+    adapter( head_l,   head_r,    dome_rad+thickness*2,  true );
+    adapter( handle_l, handle_r, -dome_rad-thickness*2, true );
+    coupling( dome_rad, bolt_d, thread_d );
+    cr2032_retainer_half(dome_rad);
 }
 
 
 // Build the thing
 if( print_cr2032_half ){
-    translate([0, dome_rad+thickness*2, 0])
-        rotate([0,0,0] )
+    cr2032_retainer_half(dome_rad);
+    mirror([ 0,0,1] )
         cr2032_retainer_half(dome_rad);
  }
  else{
+     
      wand_coupler();
+     if( !print_half ){
+         translate([0,dome_rad*2+10,0])
+             mirror([1,0,0])
+             wand_coupler();
+     }
  }
 
