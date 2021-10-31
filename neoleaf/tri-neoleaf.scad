@@ -24,6 +24,31 @@ h = 1; // [0:1:100]
 module __Customizer_Limit__(){}
 pcb_d = 9.6; //Neo pixel diameter
 
+///< Functions
+function square_vec( x ) = [
+                            [0,0,0],
+                            [0,x,0],
+                            [x,x,0],
+                            [x,0,0],
+                            ];
+
+
+function echov( v ) = [ for (i= [0:1:len(v)-1])v];
+function addr( x, y ) = x + y;
+function subr( x, y ) = x - y;
+function addifeq( x, y, eq ) = x == eq
+    ? addr( x, y )
+    : x;
+function subifeq( x, y, eq ) = x == eq
+    ? subr( x, y )
+    : x;
+///< These mod<> names are horrible descriptors
+function modif( x, y, eq ) = x == eq
+    ? addr( x, y )
+    : subr( x, y );
+
+function vmodif( v, x ) = [ modif( v[0], x, 0 ), modif( v[1], x, 0 ), 0 ];
+function modvec( v, x ) = [ for (i= [0:1:len(v)-1]) vmodif( v[i], x )];
 
 ///< Modules
 
@@ -38,20 +63,10 @@ module distribute( points, rot=0, inc = 0 ){
 }
 
 module cell( height = 15, thickness = 1){
-    ex_points = [
-              [0,    0,0],
-              [0,  100,0],
-              [100,100,0],
-              [100,  0,0],
-              ];
-              
-    in_points = [
-                 [ ex_points[0][0]+thickness, ex_points[0][1]+thickness, 0 ],
-                 [ ex_points[1][0]+thickness, ex_points[1][1]-thickness, 0 ],
-                 [ ex_points[2][0]-thickness, ex_points[2][1]-thickness, 0 ],
-                 [ ex_points[3][0]-thickness, ex_points[3][1]+thickness, 0 ],
-                 ];
-
+    ex_points = square_vec( 100 );              
+    in_points = modvec( ex_points, thickness );
+    clip_points = modvec( ex_points, 10 );
+    
     module shell(p){
         hull(){
         distribute( p )
@@ -59,27 +74,19 @@ module cell( height = 15, thickness = 1){
         }
     }
 
-    module clips(p=in_points){
-        clip_points = [ [in_points[0][0],in_points[0][1],0],
-                        [in_points[1][0],in_points[1][1],0],
-                        [in_points[2][0],in_points[2][1],0],
-                        [in_points[3][0],in_points[3][1],0],
-                        ];
-        
+    module clips(p){
         distribute(clip_points, 45, -90)
             neoclip();
     }
 
     difference(){
         shell(ex_points);
-        #shell(in_points );
+        translate( [0,0,thickness] )#shell(in_points );
     }
                
     translate([0,0,pcb_d/2+thickness])
-        clips( in_points );
+        clips( clip_points );
 }
 
 ///< Build object
-
 cell();
-
