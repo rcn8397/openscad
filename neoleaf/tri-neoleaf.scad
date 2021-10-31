@@ -32,6 +32,11 @@ function square_vec( x ) = [
                             [x,0,0],
                             ];
 
+function eqtri_vec( h ) = [
+                           [0,  0, 0],
+                           [h/2,opposite_side_th( 45,h), 0],
+                           [h,  0, 0],
+                           ];
 
 function echov( v ) = [ for (i= [0:1:len(v)-1])v];
 function addr( x, y ) = x + y;
@@ -62,8 +67,8 @@ module distribute( points, rot=0, inc = 0 ){
     }
 }
 
-module cell( height = 15, thickness = 1){
-    ex_points = square_vec( 100 );              
+module cell( points = square_vec( 100 ), height = 15, thickness = 1){
+    ex_points = points;
     in_points = modvec( ex_points, thickness );
     clip_points = modvec( ex_points, 10 );
     
@@ -89,4 +94,6 @@ module cell( height = 15, thickness = 1){
 }
 
 ///< Build object
-cell();
+//cell();
+cell( eqtri_vec( 100 ) );
+echo( eqtri_vec( 10 ) );
