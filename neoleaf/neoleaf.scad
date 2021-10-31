@@ -54,6 +54,8 @@ function modif( x, y, eq ) = x == eq
 
 function vmodif( v, x ) = [ modif( v[0], x, 0 ), modif( v[1], x, 0 ), 0 ];
 function modvec( v, x ) = [ for (i= [0:1:len(v)-1]) vmodif( v[i], x )];
+//function shape  w, x ) = ( w == "square"
+                           //                        ? 
 
 ///< Modules
 
@@ -71,6 +73,14 @@ module cell( points = square_vec( 100 ), height = 15, thickness = 1){
     ex_points = points;
     in_points = modvec( ex_points, thickness );
     clip_points = modvec( ex_points, 10 );
+
+    //< Create point cloud
+
+    //< Create smaller by X point cloud
+
+    //< Move smaller point cloud by N in the X and Y planes
+
+    //< Profit
     
     module shell(p){
         hull(){
@@ -95,5 +105,5 @@ module cell( points = square_vec( 100 ), height = 15, thickness = 1){
 
 ///< Build object
 //cell();
-cell( eqtri_vec( 100 ) );
+cell( );
 echo( eqtri_vec( 10 ) );

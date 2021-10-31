@@ -1,6 +1,11 @@
 ///< Math scad module
 
 
+function min( x, y ) = x<=y?x:y;
+function max( x, y)  = x>=y?x:y;
+function xlty( x, y ) = x<y;
+function xgty( x, y ) = x>y;
+
 ///< Find the hypotenuse from two sides of a right triangle
 function hyp_from_sides( a, b ) = sqrt( pow( a, 2 ) + pow( b, 2 ) );
 
