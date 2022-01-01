@@ -16,7 +16,7 @@ $fn = 60;
 num_switches = 9; 
 
 // Switch Hole Radius
-sw_hole_r = 3.125; // [0:0.001:100]
+sw_hole_r = 3.25; // [0:0.001:100]
 
 // Rotation 
 rot_x = 10; // [-90:0.1:90] 
@@ -64,7 +64,13 @@ legend7 = "rev1";
 legend8 = "rev2";
 
 // Legend 9
-legend9 = "";
+legend9 = "test";
+
+// Legend 10
+legend10 = "";
+
+// Legend 11
+legend11 = "";
 
 ///< Parameters after this are hidden from the customizer
 module __Customizer_Limit__(){}
@@ -72,7 +78,7 @@ rot_y = 0; // [-360:0.1:360]
 rot_z = 0; // [-360:0.1:360]
 
 // Text Legends 
-txt = [ legend1, legend2, legend3, legend4, legend5, legend6, legend7, legend8, legend9 ];
+txt = [ legend1, legend2, legend3, legend4, legend5, legend6, legend7, legend8, legend9, legend10, legend11 ];
 
 ///< Modules
 
