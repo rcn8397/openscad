@@ -121,9 +121,6 @@ module object( r = sw_hole_r, pad = pad, t = thickness, lh = legend_h, tstr, fnt
                 translate( [ 0, fd*.10, 0 ] )
                 cube( [w/4, fd/2, 10 ],true );
     }
-
-    //< Legend TODO
-
 }
 
 
