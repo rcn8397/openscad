@@ -1,6 +1,4 @@
 ///< Object definition
-use <../lib/math.scad>;
-use <../lib/utils.scad>;
 
 /*
   Rack Unit overview
@@ -90,12 +88,6 @@ mount_points =
 module mounts( r = 1, h = 1, points, rot = [0,0,0] ){
   for( p = points ){
     translate( p ) rotate( rot )cylinder( r = r, h=h);
-  }
-}
-
-module chamfer( d1, d2, h, points, rot = [0,0,0] ){
-  for( p = points ){
-    translate( p ) rotate( rot )cylinder(d1=d1, d2=d2, h=h);
   }
 }
 
