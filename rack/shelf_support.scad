@@ -1,7 +1,4 @@
 ///< Object definition
-use <../lib/math.scad>;
-use <../lib/utils.scad>;
-
 
 /*
   Rack Unit overview
@@ -79,7 +76,7 @@ module mounting_sys( r, plate_thickness, points, shelf_points, shelf_dem, chmf, 
         hull(){
             rotate([0,90,0])
                 translate( shelf_points )cube( shelf_dem );
-            color(rand_clr())
+            color("cyan")
                 rack_mount( r, plate_thickness, points, pad = pad );
         }
         mirror([0,0,1])
