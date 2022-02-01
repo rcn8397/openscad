@@ -1,4 +1,4 @@
-///< Alitovo Neo pixel RGB X000UCVKBH 2812b-1-LED-WH
+///< Alitove Neo pixel RGB X000UCVKBH 2812b-1-LED-WH
 
 
 ///< Parameters - Begin
