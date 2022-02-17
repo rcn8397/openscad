@@ -10,12 +10,14 @@ Parameters
 function in2mm( i ) = ( i * 25.4 ); 
 function mm2in( m ) = ( m / 25.4 );
 
-$fn = 90;
+$fn = 60;
 
 // Board length 3.50" (88.9mm)
-board_l = 88.9; // [0:0.01:500]
+board_l = 44.5; // [0:0.01:500]
+///board_l = 88.9; // [0:0.01:500]
 // Board width 3.00" (76.2mm)
-board_w = 76.2; // [0:0.01:500]
+board_w = 38.1; // [0:0.01:500]
+///board_w = 76.2; // [0:0.01:500]
 // Board thickness 0.062" (1.57mm)
 board_t = 1.57; // [0:0.01:10]
 
@@ -43,12 +45,15 @@ module grid( rows = 1, columns = 1, p = pitch, d = hole_d, t = board_t, center =
 }
 
 module board( l = board_l, w = board_w, t = board_t, center = true ){
-    cube( [l, w, t], center = center );
     x = l/2;
     y = w/2;
     rows = (board_l/pitch)-1;
     columns = (board_w/pitch)-1;
-    translate([-x+pitch,-y+pitch,board_t])grid( rows, columns );
+
+    difference(){
+    cube( [l, w, t], center = center );
+    translate([-x+pitch,-y+pitch,0])#grid( rows, columns );
+    }
 }
 
 ///< Build object
