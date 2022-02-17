@@ -44,9 +44,14 @@ module grid( rows = 1, columns = 1, p = pitch, d = hole_d, t = board_t, center =
 
 module board( l = board_l, w = board_w, t = board_t, center = true ){
     cube( [l, w, t], center = center );
+    x = l/2;
+    y = w/2;
+    rows = (board_l/pitch)-1;
+    columns = (board_w/pitch)-1;
+    translate([-x+pitch,-y+pitch,board_t])grid( rows, columns );
 }
 
 ///< Build object
-//board(); 
+board(); 
 
-grid(3, 3);
+//grid(3, 3);
