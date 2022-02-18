@@ -14,14 +14,15 @@ $fn = 60;
 
 // Board length 3.50" (88.9mm)
 board_l = 88.9; // [0:0.01:250]
+
 // Board width 3.00" (76.2mm)
 board_w = 76.2; // [0:0.01:250]
+
 // Board thickness 0.062" (1.57mm)
 board_t = 1.57; // [0:0.01:10]
 
 // Pitch 0.100" (2.54mm)
 pitch = 2.54; // [0:0.01:10]
-
 
 // Hole Diameter 0.042" (1.07mm)
 hole_d = 1.07; // [0:0.01:10]
@@ -43,7 +44,7 @@ module __Customizer_Limit__(){}
 
 
 ///< Modules
-module hole_grid( rows = 1, columns = 1, p = pitch, d = hole_d, t = board_t ){
+module hole_grid( rows = 1, columns = 1, p = pitch, d = hole_d ){
     grid_l = ( ( columns -1  ) * p )- d/2;
     grid_w = ( ( rows - 1    ) * p )- d/2;
     ///< Center the grid
@@ -97,7 +98,7 @@ module vector_board( l       = board_l,
     linear_extrude( height = t ){
         difference(){
             board(l,w,rounded);
-                #hole_grid( rows, columns  );
+                #hole_grid( rows, columns );
             if( mounts ){
             #mounting_holes( pts = mounting_hole_pts, mount_d );
             }
@@ -107,5 +108,3 @@ module vector_board( l       = board_l,
 
 ///< Build object
 vector_board(l = board_l, w = board_w, p = pitch, mounts = use_mounting_holes, mount_d = mounting_hole_d, padding = padding, rounded = rounded );
-
-//hole_grid(3, 3);
