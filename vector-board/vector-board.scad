@@ -12,6 +12,8 @@ Parameters
 
 $fn = 60;
 
+/* Board Dimensions */
+
 // Board length 3.50" (88.9mm)
 board_l = 88.9; // [0:0.01:250]
 
@@ -25,10 +27,16 @@ board_t = 1.57; // [0:0.01:10]
 pitch = 2.54; // [0:0.01:10]
 
 // Hole Diameter 0.042" (1.07mm)
-hole_d = 1.07; // [0:0.01:10]
+hole_d = 1.60; // [0:0.001:5]
+///<hole_d = 1.067; // [0:0.001:5]
 
 // Edge Padding
 padding = 1.25; // [0:0.01:10]
+
+// Rounded Corners
+rounded = true;
+
+/* Mounting Parameters */
 
 // Mounting Holes
 use_mounting_holes = true;
@@ -36,8 +44,6 @@ use_mounting_holes = true;
 // Mounting Holes Diamter
 mounting_hole_d = 3.0; // [0:0.01:10]
 
-// Rounded Corners
-rounded = true;
 
 ///< Parameters after this are hidden from the customizer
 module __Customizer_Limit__(){}
