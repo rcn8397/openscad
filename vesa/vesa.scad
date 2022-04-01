@@ -15,10 +15,10 @@ Parameters
 $fn = 60;
 
 // VESA modes
-vesa_mode = "VESA100"; // [ VESA75, VESA100, VESA200, VESA400 ]
+vesa_mode = "VESA75"; // [ VESA75, VESA100, VESA200, VESA400 ]
 
 // Thread Diameter
-thread_d = 3; // [ 0: 0.1: 10]
+thread_type = "M4"; // [ M2, M2.5, M3, M3.5, M4, M5, M6 ]
 
 // Height
 height = 4; // [ 0: 0.1: 30 ]
@@ -39,16 +39,20 @@ _modes = [
           ];
 
 _hardware = [
-             [ "M2",   0 ],
-             [ "M2.5", 0 ],
-             [ "M3",   0 ],
-             [ "M4",   0 ],
-             [ "M5",   0 ],
-             [ "M6",   0 ],
+             [ "M2",   2   ],
+             [ "M2.5", 2.5 ],
+             [ "M3",   3   ],
+             [ "M3.5", 3.5 ],
+             [ "M4",   4   ],
+             [ "M5",   5   ],
+             [ "M6",   6   ],
              ];
 
 function variations( mode = "VESA400" )=
     _modes[ search( [mode], _modes, 1, 0)[0]][1];
+
+function hardware( type = "M4" ) =
+    _hardware[ search( [type], _hardware, 1, 0 )[0]][1];
 
 module cylinders( pts, d, h ){
     for( p = pts ){
@@ -67,7 +71,7 @@ module plate( pts, d, h, hole_d ){
 }
 
 ///< Modules
-module vesa( mode, thread_d = thread_d,  width = plate_w, h = height, center_plate = true ){
+module vesa( mode, thread_d,  width = plate_w, h = height, center_plate = true ){
     points = [
               /* Plate 1 */
               [ 0,    0,    0 ],
@@ -112,5 +116,5 @@ module vesa( mode, thread_d = thread_d,  width = plate_w, h = height, center_pla
 ///< Build object
 mode = variations( vesa_mode );
 echo( "Variation: ", vesa_mode, mode );
-vesa( variations( vesa_mode ) );
+vesa( variations( vesa_mode ), hardware( thread_type ) );
 
