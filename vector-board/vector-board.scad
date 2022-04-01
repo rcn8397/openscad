@@ -88,7 +88,8 @@ module vector_board( l       = board_l,
                      mounts  = true,
                      mount_d = 3,
                      padding = 2.5,
-                     rounded = true
+                     rounded = true,
+                     print_mnt_pts = true
                      ){
 
     pad     = padding + mount_d/2;
@@ -101,6 +102,9 @@ module vector_board( l       = board_l,
                          [ (l/2)-pad, -(w/2)+pad, 0],
                          ];
 
+    if( print_mnt_pts ){
+        echo( "pts: ", mounting_hole_pts );    
+    }
     linear_extrude( height = t ){
         difference(){
             board(l,w,rounded);
