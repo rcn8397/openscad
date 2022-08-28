@@ -35,7 +35,7 @@ join_h = 5; // [0:1:100]
 
 
 // Thread Diameter
-thread_type = "M2"; // [ M2, M2.5, M3, M3.5, M4, M5, M6 ]
+thread_type = "M2"; // [ M1, M1.5, M2, M2.5, M3, M3.5, M4, M5, M6 ]
 
 // Through hole height
 through_hole_h = 5; // [0:1:20]
@@ -87,7 +87,7 @@ _bezz_h = join_h; // [0:1:100]
 
 
 ///< Functions
-function hardware( type = "M2" ) =
+function hardware( type = "M1" ) =
     _hardware[ search( [type], _hardware, 1, 0 )[0]][1];
 
 ///< Modules
