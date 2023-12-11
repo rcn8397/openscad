@@ -28,9 +28,10 @@ fan_h = 120; // [0:1:120]
 fan_d = 25; // [0:1:25]
 
 // Fan thickness
-fan_thickness = 5; // [0:1:5]
+fan_thickness = 2.5; // [0:1:5]
 
-fan_cutout = 113; // [0:1:113]
+// Fan diameter
+fan_diameter = 113; // [0:1:113]
 
 // distance from the center of mounting holes
 hole_offset = 105; // [0:1:105]
@@ -60,17 +61,26 @@ module mounting_holes( points = mount_points ){
 }
 
 
-module bracket(){
+module plate(){
     translate([-offset,-offset,0])
         resize( [ fan_w, fan_w, fan_thickness ] )
         rounded_box( points = mount_points, facets = 30 );
 }
 
-///< Build object
-
-
+module fan(){
+    cylinder( d = fan_diameter, h = fan_thickness+2, center = true );
+}
+module braket() {
 difference(){
-bracket();
-translate( [0,0,fan_thickness/2] ) mounting_holes();
+    plate();
+    translate( [0,0,fan_thickness/2] ) mounting_holes();
+    translate( [fan_w/2,fan_w/2,fan_thickness/2] )fan();
+ }
 }
 
+
+
+
+
+///< Build object
+braket();
