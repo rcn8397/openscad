@@ -80,17 +80,19 @@ difference(){
  }
 }
 
-module drive_wings(){
-
-    translate([-wing_w,0,0])
-    cube( [ wing_w, fan_w, fan_thickness ] );
-    translate([fan_w-1,0,0])
-    cube( [ wing_w, fan_w, fan_thickness ] );
+module drive_wing(){
+    difference(){
+        union(){
+            translate([-wing_w,0,0])
+                cube( [ wing_w, fan_w, fan_thickness ] );
+            translate([-wing_w,0,0])
+                color("green")cube( [ fan_thickness, fan_w, 20 ] );
+        }
+        translate([-wing_w+fan_thickness*4,10,1])
+            tile( 10, 2, 11 )
+            color("red")cylinder( d = 10, h = fan_thickness+2, center = true, $fn = 6 );
+    }
     
-    translate([-wing_w,0,0])
-    color("green")cube( [ fan_thickness, fan_w, 20 ] );
-    translate([fan_w+wing_w-1,0,0])
-    color("green")cube( [ fan_thickness, fan_w, 20 ] );
 }
 
 module drive_mounts(){
@@ -103,7 +105,12 @@ module drive_mounts(){
     }
 }
 
-
+module drive_wings(){
+    color("cyan")drive_wing();
+    translate([fan_w-1,0,0])
+    mirror([1,0,0])color("orange")
+        drive_wing();        
+}
 
 ///< Build object
 braket();
