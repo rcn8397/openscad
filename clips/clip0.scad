@@ -94,7 +94,7 @@ module deflection( r = deflect_rad, x = deflect_x, y = deflect_y, h = height, t 
 module deflectors( r = deflect_rad, x = deflect_x, y = deflect_y, h = height, t = thickness ){
     color( "cyan" )
         deflection( r, x, y, h, t);
-    mirror([1,,0]){
+    mirror([1,0,0]){
         color( "cyan" )
             deflection( r, x, y, h, t);
     }

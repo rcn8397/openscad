@@ -2,8 +2,8 @@
 use <../lib/math.scad>;
 use <../lib/utils.scad>;
 use <../lib/hull.scad>;
-
-
+use <../lib/cantilever.scad>;
+use <../lib/tile2.scad>;
 /*
 Module: P12 Series Arctic 120mm fan
 
@@ -52,6 +52,9 @@ mount_points = [
                 [x + hole_offset, y + hole_offset, 0],
                 ];
 
+drive_bay_5_25 = 146.1; // mm (or 5 and 3/4 inches )
+wing_w = ( drive_bay_5_25 - fan_w );
+
 ///< Modules
 module mounting_holes( points = mount_points ){
     for ( p = points ){
@@ -59,7 +62,6 @@ module mounting_holes( points = mount_points ){
             cylinder( d = mount_hole_dia, h= fan_thickness+2, center = true );
     }
 }
-
 
 module plate(){
     translate([-offset,-offset,0])
@@ -78,9 +80,36 @@ difference(){
  }
 }
 
+module drive_wings(){
 
+    translate([-wing_w,0,0])
+    cube( [ wing_w, fan_w, fan_thickness ] );
+    translate([fan_w-1,0,0])
+    cube( [ wing_w, fan_w, fan_thickness ] );
+    
+    translate([-wing_w,0,0])
+    color("green")cube( [ fan_thickness, fan_w, 20 ] );
+    translate([fan_w+wing_w-1,0,0])
+    color("green")cube( [ fan_thickness, fan_w, 20 ] );
+}
+
+module drive_mounts(){
+    point = [fan_w/2,120/4,10];
+    rotate_about_pt( 0,90, point )
+    translate(point)
+        tile( 2, 1, 120/2 ){
+        color("pink")
+            cylinder( d = 5.0, h = ( fan_w + ( wing_w * 2.0 ) )+5, center = true );
+    }
+}
 
 
 
 ///< Build object
 braket();
+difference(){
+    drive_wings();
+    drive_mounts();
+}
+
+
