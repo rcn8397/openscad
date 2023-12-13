@@ -39,18 +39,30 @@ hole_offset = 105; // [0:1:105]
 // mounting hole diamater
 mount_hole_dia = 4.40; // [0:0.1:5]
 
+// Half or full print
+half = false;
+
 ///< Parameters after this are hidden from the customizer
 module __Customizer_Limit__(){}
 
 offset = 7.5;
 x = offset;
 y = offset;
-mount_points = [
-                [x,               y,               0],
-                [x + hole_offset, y,               0],
-                [x,               y + hole_offset, 0],
-                [x + hole_offset, y + hole_offset, 0],
-                ];
+
+
+full_mount_points = [
+                     [x,               y,               0],
+                     [x + hole_offset, y,               0],
+                     [x,               y + hole_offset, 0],
+                     [x + hole_offset, y + hole_offset, 0],
+                     ];
+
+half_mount_points = [
+                     [x,               y,               0],
+                     [x,               y + hole_offset, 0],
+                     ];
+
+mount_points = half ? half_mount_points : full_mount_points ;
 
 drive_bay_5_25 = 146.1; // mm (or 5 and 3/4 inches )
 wing_w = ( drive_bay_5_25 - fan_w );
@@ -63,20 +75,28 @@ module mounting_holes( points = mount_points ){
     }
 }
 
-module plate(){
-    translate([-offset,-offset,0])
-        resize( [ fan_w, fan_w, fan_thickness ] )
-        rounded_box( points = mount_points, facets = 30 );
+module plate(half = false){
+
+        if( half ){
+            color("magenta")
+                cube( [ fan_w/2 ,fan_w, fan_thickness ] );
+        }
+       else{
+          translate([-offset,-offset,0])
+          resize( [ fan_w, fan_w, fan_thickness ] )
+          rounded_box( points = mount_points, facets = 30 );
+       }
 }
 
 module fan(){
     cylinder( d = fan_diameter, h = fan_thickness+2, center = true );
 }
-module braket() {
+
+module braket( half = false ) {
 difference(){
-    plate();
-    translate( [0,0,fan_thickness/2] ) mounting_holes();
-    translate( [fan_w/2,fan_w/2,fan_thickness/2] )fan();
+    plate( half );
+    #translate( [0,0,fan_thickness/2] ) mounting_holes();
+    #translate( [fan_w/2,fan_w/2,fan_thickness/2] )fan();
  }
 }
 
@@ -92,7 +112,7 @@ module drive_wing(){
             tile( 10, 2, 11 )
             color("red")cylinder( d = 10, h = fan_thickness+2, center = true, $fn = 6 );
     }
-    
+
 }
 
 module drive_mounts(){
@@ -105,18 +125,18 @@ module drive_mounts(){
     }
 }
 
-module drive_wings(){
+module drive_wings(half = false){
     color("cyan")drive_wing();
-    translate([fan_w-1,0,0])
-    mirror([1,0,0])color("orange")
-        drive_wing();        
+    if( !half ){
+        translate([fan_w-1,0,0])
+            mirror([1,0,0])color("orange")
+            drive_wing();
+    }
 }
 
 ///< Build object
-braket();
+braket(half);
 difference(){
-    drive_wings();
+    drive_wings(half);
     drive_mounts();
 }
-
-
