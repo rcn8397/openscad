@@ -64,8 +64,8 @@ half_mount_points = [
 
 mount_points = half ? half_mount_points : full_mount_points ;
 
-drive_bay_5_25 = 146.1; // mm (or 5 and 3/4 inches )
-wing_w = ( drive_bay_5_25 - fan_w );
+drive_bay_5_25 = 146.6; // mm (or 5 and 3/4 inches )
+wing_w = ( drive_bay_5_25 - fan_w )/2.0;
 
 ///< Modules
 module mounting_holes( points = mount_points ){
@@ -108,9 +108,10 @@ module drive_wing(){
             translate([-wing_w,0,0])
                 color("green")cube( [ fan_thickness, fan_w, 20 ] );
         }
-        translate([-wing_w+fan_thickness*4,10,1])
-            tile( 10, 2, 11 )
-            color("red")cylinder( d = 10, h = fan_thickness+2, center = true, $fn = 6 );
+        dia = 7.5;
+        translate([-wing_w/2.0,dia/2.0+fan_thickness,1])
+            tile( 11, 1, 10.5 )
+            color("red")#cylinder( d = dia, h = fan_thickness+2, center = true, $fn = 6 );
     }
 
 }
